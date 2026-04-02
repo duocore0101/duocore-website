@@ -1,36 +1,58 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# NexSys Portfolio & Billing Platform
 
-## Getting Started
+A modern, scalable SaaS-style platform featuring a futuristic dark AI theme, built for software consulting firms. It includes a public-facing portfolio and a secure backend administration dashboard for managing clients, quotations, and invoices.
 
-First, run the development server:
+## Technologies Used
+- **Framework:** Next.js (App Router)
+- **Language:** TypeScript
+- **Styling:** Tailwind CSS, shadcn/ui, Framer Motion
+- **Database/Auth:** Supabase (PostgreSQL)
+- **PDF Generation:** jsPDF + jspdf-autotable
+- **Charts:** Recharts
 
+## Setup Instructions
+
+### 1. Install Dependencies
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### 2. Configure Supabase Environment Variables
+Copy the `.env.example` file to `.env.local`:
+```bash
+cp .env.example .env.local
+```
+Fill in the `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_ANON_KEY` from your Supabase Project Settings > API.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### 3. Database Migration
+In the root directory, you will find `supabase_schema.sql`.
+1. Go to your Supabase Dashboard.
+2. Navigate to the SQL Editor.
+3. Paste the contents of `supabase_schema.sql` and click **Run**.
+This will set up all required tables (clients, quotations, invoices, items) and Row Level Security policies.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### 4. Running the Development Server
+```bash
+npm run dev
+```
+Navigate to `http://localhost:3000` to see the public website.
+Navigate to `http://localhost:3000/admin/login` to access the Admin Dashboard.
 
-## Learn More
+## Features
 
-To learn more about Next.js, take a look at the following resources:
+**Public Website**
+- Animated Hero, Services Overview, Project Showcase, Testimonials, Contact.
+- Dynamic responsive grids and glassmorphism UI.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+**Admin Dashboard**
+- Protected route middleware using Supabase Auth.
+- **Client Management:** Comprehensive list and modal forms for adding clients.
+- **Quotation System:** Dynamic quote maker with instant calculations, line items, and PDF download in a customized dark theme.
+- **Billing System:** Invoice generation, import from quotes, mark as paid/unpaid, and PDF exports.
+- **Analytics:** Visual overview using Recharts for revenue tracking.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Deployment on Vercel
+1. Push your code to GitHub.
+2. Import the project in Vercel.
+3. Add `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_ANON_KEY` inside Vercel Environment Variables.
+4. Click Deploy. Next.js will automatically optimize standard build components.

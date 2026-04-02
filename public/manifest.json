@@ -1,0 +1,23 @@
+{
+  "name": "Duocore Softwares LLP",
+  "short_name": "Duocore",
+  "description": "Leading Software Development LLP specializing in custom enterprise solutions.",
+  "start_url": "/admin",
+  "display": "standalone",
+  "background_color": "#020617",
+  "theme_color": "#020617",
+  "icons": [
+    {
+      "src": "/icons/new-icon.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/new-icon.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
+}
