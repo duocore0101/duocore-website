@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Plus, X, Upload, Loader2, Image as ImageIcon, MessageSquare, Star, Trash2 } from "lucide-react";
+import { Plus, X, Upload, Loader2, MessageSquare, Star, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import {

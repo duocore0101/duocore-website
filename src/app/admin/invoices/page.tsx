@@ -4,25 +4,41 @@ import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { Plus, Search, MoreHorizontal, Download, Trash2, Edit, CheckCircle } from "lucide-react";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger, DropdownMenuSeparator } from "@/components/ui/dropdown-menu";
+import { Plus, Search, Download, Trash2, Edit } from "lucide-react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import Link from "next/link";
 import { generatePDF } from "@/utils/pdfGenerator";
 import { createClient } from "@/lib/supabase/client";
 import { logActivity } from "@/lib/supabase/logging";
 
+interface Invoice {
+  id: string;
+  number: string;
+  title: string;
+  client_id: string;
+  items: {
+    service: string;
+    quantity: number;
+    unitPrice: number;
+    total: number;
+  }[];
+  subtotal: number;
+  tax: number;
+  total: number;
+  status: string;
+  date: string;
+  due: string;
+  created_at: string;
+  clientName: string;
+  clientPhone: string;
+  clientEmail: string;
+}
+
 export default function InvoicesPage() {
   const supabase = createClient();
   const [search, setSearch] = useState("");
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const [invoices, setInvoices] = useState<any[]>([]);
-  const [importDialogOpen, setImportDialogOpen] = useState(false);
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const [availableQuotes, setAvailableQuotes] = useState<any[]>([]);
-  const [isImporting, setIsImporting] = useState(false);
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const [previewInvoice, setPreviewInvoice] = useState<any>(null);
+  const [invoices, setInvoices] = useState<Invoice[]>([]);
+  const [previewInvoice, setPreviewInvoice] = useState<Invoice | null>(null);
 
   const fetchInvoices = async () => {
     const { data, error } = await supabase
@@ -38,7 +54,11 @@ export default function InvoicesPage() {
         ...i,
         clientName: i.client?.name || 'Unknown Client',
         clientPhone: i.client?.phone || 'No phone provided',
-        clientEmail: i.client?.email || 'No email provided'
+        clientEmail: i.client?.email || 'No email provided',
+        number: i.number || i.id,
+        date: i.date || new Date(i.created_at).toLocaleDateString(),
+        title: i.title || 'Project Invoice',
+        due: i.due || ''
       }));
       setInvoices(formatted);
     }
@@ -49,63 +69,12 @@ export default function InvoicesPage() {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [supabase]);
 
-  const handleOpenImport = async () => {
-    setImportDialogOpen(true);
-    const { data } = await supabase
-      .from('quotations')
-      .select(`*, client:client_id (name)`)
-      .order('created_at', { ascending: false });
-    
-    if (data) {
-      setAvailableQuotes(data.map(q => ({
-        ...q,
-        clientName: q.client?.name || 'Unknown Client'
-      })));
-    }
-  };
-
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const importQuotation = async (quote: any) => {
-    setIsImporting(true);
-    try {
-      const { count } = await supabase.from('invoices').select('*', { count: 'exact', head: true });
-      const nextId = (count || 0) + 1;
-      const invNumber = `INV-${nextId.toString().padStart(4, '0')}`;
-      
-      const due = new Date();
-      due.setDate(due.getDate() + 15);
-
-      const { error } = await supabase.from('invoices').insert([{
-        client_id: quote.client_id,
-        number: invNumber,
-        title: quote.title,
-        date: new Date().toLocaleDateString('en-GB'),
-        due: "",
-        subtotal: quote.subtotal,
-        tax: quote.tax,
-        total: quote.total,
-        items: quote.items,
-        status: 'Unpaid'
-      }]);
-
-      if (!error) {
-        setImportDialogOpen(false);
-        fetchInvoices();
-      } else {
-        console.error("Import failed:", error);
-      }
-    } finally {
-      setIsImporting(false);
-    }
-  };
-
   const filtered = invoices.filter(i => 
     i.number.toLowerCase().includes(search.toLowerCase()) || 
     i.clientName.toLowerCase().includes(search.toLowerCase())
   );
 
-  const handleDownload = async (invoice: typeof invoices[0]) => {
-    // Helper to convert public URLs to base64 for jsPDF
+  const handleDownload = async (invoice: Invoice) => {
     const urlToBase64 = async (url: string): Promise<string | undefined> => {
       try {
         const response = await fetch(url);
@@ -150,13 +119,6 @@ export default function InvoicesPage() {
     });
   };
 
-  const toggleStatus = async (id: string, newStatus: string) => {
-    const { error } = await supabase.from('invoices').update({ status: newStatus }).eq('id', id);
-    if (!error) {
-      setInvoices(invoices.map(inv => inv.id === id ? { ...inv, status: newStatus } : inv));
-    }
-  };
-
   const handleDelete = async (id: string) => {
     const inv = invoices.find(i => i.id === id);
     const { error } = await supabase.from('invoices').delete().eq('id', id);
@@ -179,13 +141,6 @@ export default function InvoicesPage() {
         </div>
         
         <div className="flex flex-wrap gap-3 w-full sm:w-auto">
-          <Button 
-            variant="outline" 
-            className="flex-1 sm:flex-none border-primary/20 hover:bg-primary/5 text-primary font-bold"
-            onClick={() => setImportDialogOpen(true)}
-          >
-            <Plus className="mr-2 h-4 w-4" /> Import from Quotation
-          </Button>
           <Link href="/admin/invoices/create" className="flex-1 sm:flex-none">
             <Button className="w-full glow-primary">
               <Plus className="mr-2 h-4 w-4" /> New Invoice
@@ -235,38 +190,6 @@ export default function InvoicesPage() {
           </TableBody>
         </Table>
       </div>
-
-      <Dialog open={importDialogOpen} onOpenChange={setImportDialogOpen}>
-        <DialogContent className="sm:max-w-[600px] bg-card border-border">
-          <DialogHeader>
-            <DialogTitle className="text-2xl">Import Quotation to Invoice</DialogTitle>
-            <DialogDescription>
-              Select a previously generated quotation to instantly convert it into a final invoice.
-            </DialogDescription>
-          </DialogHeader>
-          <div className="space-y-4 max-h-[400px] overflow-y-auto pr-2">
-            {availableQuotes.length === 0 ? (
-              <p className="text-muted-foreground py-4 text-center">No quotations available to import.</p>
-            ) : (
-              availableQuotes.map((quote) => (
-                <div key={quote.id} className="flex justify-between items-center p-4 border border-border rounded-xl hover:border-primary/50 transition-colors bg-secondary/20">
-                  <div>
-                    <h4 className="font-bold text-slate-900">{quote.number}: {quote.title}</h4>
-                    <p className="text-sm text-muted-foreground mt-1">Client: {quote.clientName} • Total: ₹{quote.total.toFixed(2)}</p>
-                  </div>
-                  <Button 
-                    onClick={() => importQuotation(quote)} 
-                    disabled={isImporting}
-                    className="shrink-0 glow-primary"
-                  >
-                    Convert
-                  </Button>
-                </div>
-              ))
-            )}
-          </div>
-        </DialogContent>
-      </Dialog>
 
       <Dialog open={!!previewInvoice} onOpenChange={(open) => !open && setPreviewInvoice(null)}>
         <DialogContent className="sm:max-w-[600px] bg-card border-border">

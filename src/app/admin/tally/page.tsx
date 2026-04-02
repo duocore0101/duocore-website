@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
@@ -11,14 +11,38 @@ import { createClient } from "@/lib/supabase/client";
 import { logActivity } from "@/lib/supabase/logging";
 import { cn } from "@/lib/utils";
 
+interface TallyCredit {
+  id: string;
+  project_name: string;
+  amount: number;
+  date: string;
+  created_at: string;
+}
+
+interface TallyExpense {
+  id: string;
+  description: string;
+  amount: number;
+  date: string;
+  created_at: string;
+}
+
+interface TallyPending {
+  id: string;
+  client_name: string;
+  amount: number;
+  due_date: string;
+  created_at: string;
+}
+
 export default function TallyPage() {
   const supabase = createClient();
-  const [credits, setCredits] = useState<any[]>([]);
-  const [expenses, setExpenses] = useState<any[]>([]);
-  const [pending, setPending] = useState<any[]>([]);
+  const [credits, setCredits] = useState<TallyCredit[]>([]);
+  const [expenses, setExpenses] = useState<TallyExpense[]>([]);
+  const [pending, setPending] = useState<TallyPending[]>([]);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [dialogType, setDialogType] = useState<'credit' | 'expense' | 'pending'>('credit');
-  const [editItem, setEditItem] = useState<any>(null);
+  const [editItem, setEditItem] = useState<TallyCredit | TallyExpense | TallyPending | null>(null);
   const [formData, setFormData] = useState({ name: '', amount: '', date: new Date().toISOString().split('T')[0] });
 
   // Distribution calculations
@@ -33,27 +57,28 @@ export default function TallyPage() {
     { name: "Aasim Khan", holding: 37.5, color: "bg-amber-500" }
   ];
 
-  const fetchTally = async () => {
+  const fetchTally = useCallback(async () => {
     const { data: cData } = await supabase.from('tally_credits').select('*').order('created_at', { ascending: false });
     const { data: eData } = await supabase.from('tally_expenses').select('*').order('created_at', { ascending: false });
     const { data: pData } = await supabase.from('tally_pending').select('*').order('created_at', { ascending: false });
     if (cData) setCredits(cData);
     if (eData) setExpenses(eData);
     if (pData) setPending(pData);
-  };
+  }, [supabase]);
 
   useEffect(() => {
     fetchTally();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [supabase]);
 
-  const handleOpenDialog = (type: 'credit' | 'expense' | 'pending', item: any = null) => {
+  const handleOpenDialog = (type: 'credit' | 'expense' | 'pending', item: TallyCredit | TallyExpense | TallyPending | null = null) => {
     setDialogType(type);
     setEditItem(item);
     if (item) {
       setFormData({ 
-        name: type === 'credit' ? item.project_name : type === 'expense' ? item.description : item.client_name, 
+        name: type === 'credit' ? (item as TallyCredit).project_name : type === 'expense' ? (item as TallyExpense).description : (item as TallyPending).client_name, 
         amount: item.amount.toString(), 
-        date: type === 'pending' ? item.due_date : item.date 
+        date: type === 'pending' ? (item as TallyPending).due_date : (item as TallyCredit | TallyExpense).date 
       });
     } else {
       setFormData({ name: '', amount: '', date: new Date().toISOString().split('T')[0] });
@@ -63,7 +88,7 @@ export default function TallyPage() {
 
   const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();
-    const payload: any = { amount: Number(formData.amount) };
+    const payload: Partial<TallyCredit & TallyExpense & TallyPending> = { amount: Number(formData.amount) };
     const tableName = dialogType === 'credit' ? 'tally_credits' : dialogType === 'expense' ? 'tally_expenses' : 'tally_pending';
     const targetType = dialogType === 'credit' ? 'Credit' : dialogType === 'expense' ? 'Expense' : 'Pending Payment';
     
@@ -101,7 +126,7 @@ export default function TallyPage() {
     // Find item first to get name for log
     const list = type === 'credit' ? credits : type === 'expense' ? expenses : pending;
     const item = list.find(i => i.id === id);
-    const targetName = type === 'credit' ? item?.project_name : type === 'expense' ? item?.description : item?.client_name;
+    const targetName = type === 'credit' ? (item as TallyCredit)?.project_name : type === 'expense' ? (item as TallyExpense)?.description : (item as TallyPending)?.client_name;
 
     const { error } = await supabase.from(tableName).delete().eq('id', id);
     if (!error) {

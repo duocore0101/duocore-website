@@ -3,11 +3,10 @@
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import Image from "next/image";
-import { LayoutDashboard, Users, FileText, FileSpreadsheet, LogOut, Menu, Wallet } from "lucide-react";
+import { LayoutDashboard, Users, FileText, FileSpreadsheet, LogOut, Wallet } from "lucide-react";
 import { createBrowserClient } from "@supabase/ssr";
 import * as React from "react";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import { Button } from "@/components/ui/button";
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();

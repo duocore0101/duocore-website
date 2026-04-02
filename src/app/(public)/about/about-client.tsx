@@ -1,19 +1,12 @@
 "use client";
 
-import { motion, useScroll, useTransform } from "framer-motion";
-import { Rocket, ShieldCheck, Cloud, Code2, Database, LayoutTemplate, Activity, ArrowRight, PlayCircle, Zap, Cpu, Server, Target } from "lucide-react";
+import { motion } from "framer-motion";
+import { ShieldCheck, Cloud, Code2, LayoutTemplate, PlayCircle, Zap, Cpu, Server, Target } from "lucide-react";
 import Link from "next/link";
 import { useRef } from "react";
 
 export function AboutClient() {
   const containerRef = useRef(null);
-  const { scrollYProgress } = useScroll({
-    target: containerRef,
-    offset: ["start start", "end end"]
-  });
-
-  const y1 = useTransform(scrollYProgress, [0, 1], [0, 200]);
-  const y2 = useTransform(scrollYProgress, [0, 1], [0, -200]);
 
   return (
     <div className="flex flex-col min-h-screen bg-slate-50/30 overflow-hidden" ref={containerRef}>

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useCallback } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { motion, AnimatePresence } from "framer-motion";
 import { 
@@ -9,19 +9,17 @@ import {
   ChevronRight, 
   Quote, 
   Sparkles,
-  MessageSquarePlus,
   ArrowUpRight,
   Star,
   MessageSquare,
   Camera,
   Loader2
 } from "lucide-react";
-import { ReviewDialog } from "./review-dialog";
 import Link from "next/link";
+import Image from "next/image";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   Dialog,
   DialogContent,
@@ -33,6 +31,27 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+
+interface Project {
+  id: string;
+  title: string;
+  description: string;
+  images: string[];
+  tech_stack: string[];
+  link?: string;
+  created_at: string;
+}
+
+interface Review {
+  id: string;
+  project_id: string;
+  author: string;
+  position: string;
+  content: string;
+  rating: number;
+  image?: string;
+  created_at: string;
+}
 
 const StarRating = ({ rating, size = "md" }: { rating: number, size?: "sm" | "md" | "lg" }) => {
   const iconSize = size === "sm" ? "h-4 w-4" : size === "lg" ? "h-6 w-6" : "h-5 w-5";
@@ -82,7 +101,7 @@ function GiveReviewForm({ projectId, projectTitle, onReviewSubmit }: { projectId
         position: position,
         content: review,
         rating: rating,
-        image: image // Storing as base64 for now as per previous logic
+        image: image 
       });
 
       if (error) throw error;
@@ -121,6 +140,7 @@ function GiveReviewForm({ projectId, projectTitle, onReviewSubmit }: { projectId
               className="group relative h-20 w-20 rounded-full border-2 border-dashed border-slate-200 flex items-center justify-center cursor-pointer hover:border-primary/50 transition-all overflow-hidden bg-slate-50"
             >
               {image ? (
+                // eslint-disable-next-line @next/next/no-img-element
                 <img src={image} className="h-full w-full object-cover" alt="Preview" />
               ) : (
                 <div className="flex flex-col items-center">
@@ -171,6 +191,7 @@ function ProjectGallery({ images, title }: { images: string[], title: string }) 
   const [direction, setDirection] = useState(0);
 
   useEffect(() => {
+    if (!images.length) return;
     const timer = setInterval(() => {
       setDirection(1);
       setCurrentIndex((prev) => (prev + 1) % images.length);
@@ -181,11 +202,6 @@ function ProjectGallery({ images, title }: { images: string[], title: string }) 
   const paginate = (newDirection: number) => {
     setDirection(newDirection);
     setCurrentIndex((prev) => (prev + newDirection + images.length) % images.length);
-  };
-
-  const swipeConfidenceThreshold = 10000;
-  const swipePower = (offset: number, velocity: number) => {
-    return Math.abs(offset) * velocity;
   };
 
   const variants = {
@@ -205,12 +221,13 @@ function ProjectGallery({ images, title }: { images: string[], title: string }) 
     })
   };
 
+  if (!images.length) return null;
+
   return (
     <div className="relative aspect-[16/10] overflow-hidden rounded-2xl bg-slate-100 group/gallery shadow-3xl touch-none">
       <AnimatePresence initial={false} custom={direction} mode="popLayout">
-        <motion.img
+        <motion.div
           key={currentIndex}
-          src={images[currentIndex]}
           custom={direction}
           variants={variants}
           initial="enter"
@@ -220,16 +237,16 @@ function ProjectGallery({ images, title }: { images: string[], title: string }) 
             x: { duration: 0.8, ease: [0.4, 0, 0.2, 1] }, 
             opacity: { duration: 0.6 }
           }}
-          drag="x"
-          dragConstraints={{ left: 0, right: 0 }}
-          dragElastic={1}
-          onDragEnd={(e, { offset, velocity }) => {
-            const swipe = swipePower(offset.x, velocity.x);
-            if (swipe < -swipeConfidenceThreshold) paginate(1);
-            else if (swipe > swipeConfidenceThreshold) paginate(-1);
-          }}
-          className="absolute inset-0 h-full w-full object-cover cursor-grab active:cursor-grabbing"
-        />
+          className="absolute inset-0"
+        >
+          <Image
+            src={images[currentIndex]}
+            alt={title}
+            fill
+            className="object-cover"
+            priority={currentIndex === 0}
+          />
+        </motion.div>
       </AnimatePresence>
 
       {images.length > 1 && (
@@ -270,13 +287,13 @@ function ProjectDescription({ text }: { text: string }) {
 }
 
 export function LiveProjects() {
-  const [projects, setProjects] = useState<any[]>([]);
-  const [allReviews, setAllReviews] = useState<any[]>([]);
+  const [projects, setProjects] = useState<Project[]>([]);
+  const [allReviews, setAllReviews] = useState<Review[]>([]);
   const [showAllReviews, setShowAllReviews] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const supabase = createClient();
 
-  const fetchData = async () => {
+  const fetchData = useCallback(async () => {
     try {
       const [projectsRes, reviewsRes] = await Promise.all([
         supabase.from("projects").select("*").order("created_at", { ascending: false }),
@@ -293,11 +310,11 @@ export function LiveProjects() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [supabase]);
 
   useEffect(() => {
     fetchData();
-  }, []);
+  }, [fetchData]);
 
   if (loading) {
      return (
@@ -363,7 +380,7 @@ export function LiveProjects() {
                     <div className="px-2">
                         <ProjectDescription text={project.description} />
                         <Link 
-                            href={project.link} 
+                            href={project.link || "#"} 
                             target="_blank" 
                             className="w-full md:w-auto inline-flex items-center justify-center gap-4 px-10 py-5 rounded-2xl bg-slate-900 text-white font-black hover:bg-primary hover:scale-[1.02] transition-all shadow-[0_20px_50px_-10px_rgba(15,23,42,0.35)] active:scale-95 uppercase tracking-widest text-[11px]"
                         >
@@ -401,8 +418,9 @@ export function LiveProjects() {
                                   
                                   <div className="flex flex-col gap-6 md:gap-10 relative z-10">
                                   <div className="flex items-center gap-4 md:gap-6">
-                                      <div className="h-16 w-16 md:h-20 md:w-20 rounded-2xl bg-primary text-white flex items-center justify-center font-black text-2xl shadow-xl overflow-hidden">
+                                      <div className="h-16 w-16 md:h-20 md:w-20 rounded-2xl bg-primary text-white flex items-center justify-center font-black text-2xl shadow-xl overflow-hidden relative">
                                           {projectReviews[0].image ? (
+                                            /* eslint-disable-next-line @next/next/no-img-element */
                                             <img src={projectReviews[0].image} className="h-full w-full object-cover" alt="Client" />
                                           ) : (
                                             (projectReviews[0].author || "C")[0]
@@ -426,8 +444,9 @@ export function LiveProjects() {
                                   className="flex -space-x-3 cursor-pointer hover:translate-x-1 transition-transform group/stack"
                               >
                                 {[...Array(Math.min(projectReviews.length, 3))].map((_, i) => (
-                                    <div key={i} className="h-12 w-12 rounded-full border-2 border-white bg-slate-200 flex items-center justify-center text-slate-400 font-bold text-xs uppercase overflow-hidden">
+                                    <div key={i} className="h-12 w-12 rounded-full border-2 border-white bg-slate-200 flex items-center justify-center text-slate-400 font-bold text-xs uppercase overflow-hidden relative">
                                         {projectReviews[i].image ? (
+                                          /* eslint-disable-next-line @next/next/no-img-element */
                                           <img src={projectReviews[i].image} className="h-full w-full object-cover" alt="Client" />
                                         ) : (
                                           projectReviews[i].author[0]
@@ -475,8 +494,9 @@ export function LiveProjects() {
                               >
                                 <div className="flex flex-col gap-6">
                                     <div className="flex items-center gap-4">
-                                      <div className="h-14 w-14 rounded-xl bg-slate-50 flex items-center justify-center text-primary font-black text-xl overflow-hidden">
+                                      <div className="h-14 w-14 rounded-xl bg-slate-50 flex items-center justify-center text-primary font-black text-xl overflow-hidden relative">
                                           {rev.image ? (
+                                            /* eslint-disable-next-line @next/next/no-img-element */
                                             <img src={rev.image} className="h-full w-full object-cover" alt="Client" />
                                           ) : (
                                             rev.author[0]

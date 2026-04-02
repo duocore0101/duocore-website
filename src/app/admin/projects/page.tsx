@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Plus, Edit2, Trash2, ExternalLink, Package, Loader2, Sparkles } from "lucide-react";
+import { Edit2, Trash2, ExternalLink, Package, Loader2, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Card,

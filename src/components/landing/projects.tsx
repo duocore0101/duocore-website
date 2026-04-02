@@ -1,11 +1,11 @@
 "use client";
 
+import Image from "next/image";
 import { motion } from "framer-motion";
 import { ArrowUpRight, Sparkles, ExternalLink } from "lucide-react";
 import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 
 export function Projects() {
   const projects = [
@@ -73,9 +73,10 @@ export function Projects() {
             >
               <div className="relative aspect-[16/10] overflow-hidden rounded-2xl md:rounded-[3rem] shadow-ultimate bg-slate-100 mb-6 md:mb-10 group-hover:shadow-2xl transition-all duration-700">
                 {/* Image */}
-                <img 
+                <Image 
                   src={project.image} 
                   alt={project.title}
+                  fill
                   className="absolute inset-0 h-full w-full object-cover transition-transform duration-1000 group-hover:scale-105"
                 />
                 
@@ -132,7 +133,7 @@ export function Projects() {
   );
 }
 
-function ArrowRight(props: any) {
+function ArrowRight(props: React.SVGProps<SVGSVGElement>) {
   return (
     <svg
       {...props}

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { 
   Users, 
@@ -10,7 +10,6 @@ import {
   LayoutDashboard, 
   Activity, 
   History,
-  ArrowRight,
   TrendingUp,
   Briefcase
 } from "lucide-react";
@@ -18,9 +17,19 @@ import Link from "next/link";
 import { createClient } from "@/lib/supabase/client";
 import { cn } from "@/lib/utils";
 
+interface ActivityLog {
+  id: string;
+  admin_name: string;
+  action_type: string;
+  target_type: string;
+  target_name: string;
+  details: string;
+  created_at: string;
+}
+
 export default function AdminOverviewPage() {
   const supabase = createClient();
-  const [activities, setActivities] = useState<any[]>([]);
+  const [activities, setActivities] = useState<ActivityLog[]>([]);
   const [loading, setLoading] = useState(true);
 
   const quickLinks = [
@@ -32,7 +41,7 @@ export default function AdminOverviewPage() {
     { label: "Invoices", icon: FileSpreadsheet, href: "/admin/invoices", color: "bg-rose-500", desc: "Billing activity" },
   ];
 
-  const fetchActivities = async () => {
+  const fetchActivities = useCallback(async () => {
     try {
       const { data, error } = await supabase
         .from('admin_activities')
@@ -48,7 +57,7 @@ export default function AdminOverviewPage() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [supabase]);
 
   useEffect(() => {
     fetchActivities();
@@ -57,14 +66,14 @@ export default function AdminOverviewPage() {
     const channel = supabase
       .channel('activities_changes')
       .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'admin_activities' }, (payload) => {
-        setActivities(prev => [payload.new, ...prev].slice(0, 20));
+        setActivities(prev => [payload.new as ActivityLog, ...prev].slice(0, 20));
       })
       .subscribe();
 
     return () => {
       supabase.removeChannel(channel);
     };
-  }, [supabase]);
+  }, [supabase, fetchActivities]);
 
   const getTimeAgo = (dateStr: string) => {
     const date = new Date(dateStr);

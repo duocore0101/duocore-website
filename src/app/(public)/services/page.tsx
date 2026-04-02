@@ -1,7 +1,6 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Cpu, Globe, Rocket, ShieldCheck, Database, Smartphone } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import Link from "next/link";
 import { Testimonials } from "@/components/landing/testimonials";
 
 export const metadata = {
