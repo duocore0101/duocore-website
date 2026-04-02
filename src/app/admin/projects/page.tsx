@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Edit2, Trash2, ExternalLink, Package, Loader2, Sparkles } from "lucide-react";
+import { Edit2, Trash2, ExternalLink, Package, Loader2, Sparkles, ArrowUp, ArrowDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -76,6 +76,30 @@ export default function AdminProjectsPage() {
     }
   };
 
+  const moveProject = async (index: number, direction: 'up' | 'down') => {
+    if (direction === 'up' && index === 0) return;
+    if (direction === 'down' && index === projects.length - 1) return;
+
+    const targetIndex = direction === 'up' ? index - 1 : index + 1;
+    const projectA = projects[index];
+    const projectB = projects[targetIndex];
+
+    try {
+      // Swap their created_at timestamps to seamlessly change the globally visible sequence
+      const tempDateA = projectA.created_at;
+      const tempDateB = projectB.created_at;
+
+      await Promise.all([
+        supabase.from("projects").update({ created_at: tempDateB }).eq("id", projectA.id),
+        supabase.from("projects").update({ created_at: tempDateA }).eq("id", projectB.id)
+      ]);
+
+      fetchProjects();
+    } catch (error) {
+      console.error("Error reordering projects:", error);
+    }
+  };
+
   useEffect(() => {
     fetchProjects();
   }, []);
@@ -127,7 +151,7 @@ export default function AdminProjectsPage() {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {projects.map((project) => (
+                {projects.map((project, idx) => (
                   <TableRow key={project.id} className="group hover:bg-slate-50/30 border-border/50">
                     <TableCell className="pl-8 py-5">
                       <div className="flex items-center gap-4">
@@ -163,7 +187,15 @@ export default function AdminProjectsPage() {
                       </a>
                     </TableCell>
                     <TableCell className="text-right pr-8">
-                      <div className="flex justify-end gap-2">
+                      <div className="flex justify-end gap-1 sm:gap-2">
+                        <div className="flex flex-col gap-1 mr-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                            <Button variant="ghost" size="icon" className="h-4 w-4 bg-slate-100 hover:bg-primary/20 text-slate-400 hover:text-primary rounded-sm" onClick={() => moveProject(idx, 'up')} disabled={idx === 0}>
+                                <ArrowUp className="h-3 w-3" />
+                            </Button>
+                            <Button variant="ghost" size="icon" className="h-4 w-4 bg-slate-100 hover:bg-primary/20 text-slate-400 hover:text-primary rounded-sm" onClick={() => moveProject(idx, 'down')} disabled={idx === projects.length - 1}>
+                                <ArrowDown className="h-3 w-3" />
+                            </Button>
+                        </div>
                         <ProjectDialog project={project} onSuccess={fetchProjects} trigger={
                           <Button variant="ghost" size="icon" className="h-9 w-9 rounded-xl hover:bg-white hover:shadow-md transition-all text-slate-500 hover:text-primary">
                             <Edit2 className="h-4 w-4" />

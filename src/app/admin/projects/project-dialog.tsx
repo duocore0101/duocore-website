@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { Plus, X, Upload, Loader2, MessageSquare, Star, Trash2 } from "lucide-react";
+import imageCompression from 'browser-image-compression';
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import {
@@ -80,6 +81,20 @@ export function ProjectDialog({ project, onSuccess, trigger }: ProjectDialogProp
     }
   };
 
+  const setMainReview = async (id: string) => {
+    try {
+      // Push date 100 years into the future to guarantee it always sorts first (main review).
+      // If multiple are set as main, the most recently clicked one goes slightly further into the future!
+      const futureDate = new Date(Date.now() + 1000 * 60 * 60 * 24 * 365 * 100).toISOString();
+      const { error } = await supabase.from("project_reviews").update({ created_at: futureDate }).eq("id", id);
+      if (error) throw error;
+      fetchReviews();
+    } catch (error) {
+      console.error("Error setting main review:", error);
+      alert("Failed to set main review.");
+    }
+  };
+
   // Reset form and fetch reviews when project changes
   useEffect(() => {
     if (project) {
@@ -109,18 +124,31 @@ export function ProjectDialog({ project, onSuccess, trigger }: ProjectDialogProp
 
     setLoading(true);
     const newImages: string[] = [];
+    const options = { maxSizeMB: 0.5, maxWidthOrHeight: 1200, useWebWorker: true, fileType: "image/webp" as const };
 
     for (let i = 0; i < files.length; i++) {
         const file = files[i];
-        const reader = new FileReader();
-        
-        const promise = new Promise<string>((resolve) => {
-            reader.onloadend = () => resolve(reader.result as string);
-            reader.readAsDataURL(file);
-        });
-
-        const base64 = await promise;
-        newImages.push(base64);
+        try {
+          const compressedFile = await imageCompression(file, options);
+          const fileName = `projects/${Date.now()}_${Math.random().toString(36).substring(7)}.webp`;
+          
+          const { error } = await supabase.storage
+            .from("portfolio-assets")
+            .upload(fileName, compressedFile);
+            
+          if (error) { 
+             console.error("Upload error:", error); 
+             continue; 
+          }
+          
+          const { data: publicData } = supabase.storage
+            .from("portfolio-assets")
+            .getPublicUrl(fileName);
+            
+          newImages.push(publicData.publicUrl);
+        } catch (err) {
+          console.error("Image processing error:", err);
+        }
     }
 
     setImages([...images, ...newImages]);
@@ -300,14 +328,24 @@ export function ProjectDialog({ project, onSuccess, trigger }: ProjectDialogProp
                                             />
                                         ))}
                                     </div>
-                                    <Button 
-                                        variant="ghost" 
-                                        size="icon" 
-                                        onClick={() => deleteReview(review.id)}
-                                        className="h-8 w-8 rounded-lg text-slate-400 hover:text-destructive hover:bg-destructive/10 opacity-0 group-hover/rev:opacity-100 transition-all shadow-sm"
-                                    >
-                                        <Trash2 className="h-4 w-4" />
-                                    </Button>
+                                    <div className="flex gap-2 opacity-0 group-hover/rev:opacity-100 transition-opacity">
+                                        <Button 
+                                            variant="ghost" 
+                                            size="sm" 
+                                            onClick={() => setMainReview(review.id)}
+                                            className="h-8 rounded-lg text-amber-500 hover:text-amber-600 hover:bg-amber-50 shadow-sm text-xs font-bold px-3"
+                                        >
+                                            Set as Main
+                                        </Button>
+                                        <Button 
+                                            variant="ghost" 
+                                            size="icon" 
+                                            onClick={() => deleteReview(review.id)}
+                                            className="h-8 w-8 rounded-lg text-slate-400 hover:text-destructive hover:bg-destructive/10 shadow-sm"
+                                        >
+                                            <Trash2 className="h-4 w-4" />
+                                        </Button>
+                                    </div>
                                 </div>
                                 <p className="text-slate-700 font-medium leading-relaxed italic mb-4">&quot;{review.content}&quot;</p>
                                 <div className="flex items-center gap-2">
@@ -316,7 +354,11 @@ export function ProjectDialog({ project, onSuccess, trigger }: ProjectDialogProp
                                     </div>
                                     <span className="font-black text-xs text-slate-900">{review.author}</span>
                                     <span className="text-slate-300 mx-2">•</span>
-                                    <span className="text-[10px] text-slate-400 font-medium uppercase tracking-widest">{new Date(review.created_at).toLocaleDateString()}</span>
+                                    <span className="text-[10px] text-slate-400 font-medium uppercase tracking-widest">
+                                        {new Date(review.created_at).getFullYear() > 2090 
+                                            ? <span className="text-amber-500 font-black">Featured Review</span> 
+                                            : new Date(review.created_at).toLocaleDateString()}
+                                    </span>
                                 </div>
                             </div>
                         ))}

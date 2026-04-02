@@ -45,9 +45,9 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           <Image 
             src="/logo.png" 
             alt="Duocore Softwares Logo" 
-            width={240} 
-            height={64} 
-            className="object-contain h-14 w-auto"
+            width={180} 
+            height={45} 
+            className="object-contain h-8 w-auto"
             priority
           />
         </div>
@@ -88,9 +88,9 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           <Image 
             src="/logo.png" 
             alt="Duocore Softwares Logo" 
-            width={200} 
-            height={56} 
-            className="object-contain h-12 w-auto"
+            width={180} 
+            height={45} 
+            className="object-contain h-8 w-auto"
           />
           
           <Sheet open={isMobileMenuOpen} onOpenChange={setIsMobileMenuOpen}>
@@ -107,9 +107,9 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                   <Image 
                     src="/logo.png" 
                     alt="Duocore Softwares Logo" 
-                    width={200} 
-                    height={56} 
-                    className="object-contain h-12 w-auto"
+                    width={180} 
+                    height={45} 
+                    className="object-contain h-8 w-auto"
                   />
                 </div>
                 <div className="flex-1 py-6 px-4 space-y-2 overflow-y-auto">

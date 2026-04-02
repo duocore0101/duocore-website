@@ -31,6 +31,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import imageCompression from 'browser-image-compression';
 
 interface Project {
   id: string;
@@ -78,14 +79,34 @@ function GiveReviewForm({ projectId, projectTitle, onReviewSubmit }: { projectId
   const [isOpen, setIsOpen] = useState(false);
   const supabase = createClient();
 
-  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setImage(reader.result as string);
-      };
-      reader.readAsDataURL(file);
+    if (!file) return;
+
+    setLoading(true);
+    try {
+      const options = { maxSizeMB: 0.1, maxWidthOrHeight: 400, useWebWorker: true, fileType: "image/webp" as const };
+      const compressedFile = await imageCompression(file, options);
+      const fileName = `reviews/${Date.now()}_${Math.random().toString(36).substring(7)}.webp`;
+      
+      const { error } = await supabase.storage
+        .from("portfolio-assets")
+        .upload(fileName, compressedFile);
+
+      if (error) {
+        console.error("Upload error:", error);
+        return;
+      }
+
+      const { data: publicData } = supabase.storage
+        .from("portfolio-assets")
+        .getPublicUrl(fileName);
+
+      setImage(publicData.publicUrl);
+    } catch (err) {
+      console.error("Image processing error:", err);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -221,10 +242,15 @@ function ProjectGallery({ images, title }: { images: string[], title: string }) 
     })
   };
 
+  const swipeConfidenceThreshold = 10000;
+  const swipePower = (offset: number, velocity: number) => {
+    return Math.abs(offset) * velocity;
+  };
+
   if (!images.length) return null;
 
   return (
-    <div className="relative aspect-[16/10] overflow-hidden rounded-2xl bg-slate-100 group/gallery shadow-3xl touch-none">
+    <div className="relative aspect-[16/10] overflow-hidden rounded-2xl bg-slate-100 group/gallery shadow-3xl touch-pan-y">
       <AnimatePresence initial={false} custom={direction} mode="popLayout">
         <motion.div
           key={currentIndex}
@@ -234,10 +260,22 @@ function ProjectGallery({ images, title }: { images: string[], title: string }) 
           animate="center"
           exit="exit"
           transition={{
-            x: { duration: 0.8, ease: [0.4, 0, 0.2, 1] }, 
-            opacity: { duration: 0.6 }
+            x: { type: "spring", stiffness: 300, damping: 30 }, 
+            opacity: { duration: 0.2 }
           }}
-          className="absolute inset-0"
+          drag="x"
+          dragConstraints={{ left: 0, right: 0 }}
+          dragElastic={1}
+          onDragEnd={(e, { offset, velocity }) => {
+            const swipe = swipePower(offset.x, velocity.x);
+
+            if (swipe < -swipeConfidenceThreshold) {
+              paginate(1);
+            } else if (swipe > swipeConfidenceThreshold) {
+              paginate(-1);
+            }
+          }}
+          className="absolute inset-0 cursor-grab active:cursor-grabbing"
         >
           <Image
             src={images[currentIndex]}

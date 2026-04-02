@@ -57,7 +57,7 @@ export default function ServicesPage() {
             <p className="text-xl text-muted-foreground mb-8">
               We provide end-to-end technology solutions. From conceptualization to deployment, our team of expert architects delivers unparalleled excellence.
             </p>
-            <a href="https://wa.me/919890882900?text=Hi%20Duocore%20Team%2C%20I%E2%80%99m%20interested%20in%20building%20a%20project.%20Can%20you%20help%20me%20with%20the%20details%3F" target="_blank" rel="noopener noreferrer">
+            <a href="https://wa.me/917028350089?text=Hi%20Duocore%20Team%2C%20I%E2%80%99m%20interested%20in%20building%20a%20project.%20Can%20you%20help%20me%20with%20the%20details%3F" target="_blank" rel="noopener noreferrer">
               <Button size="lg" className="h-12 px-8 glow-primary">Start a Project</Button>
             </a>
          </div>

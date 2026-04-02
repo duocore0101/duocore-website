@@ -77,7 +77,7 @@ export function Hero() {
             variants={item}
             className="flex flex-col sm:flex-row gap-4 md:gap-8 w-full sm:w-auto"
           >
-            <a href="https://wa.me/919890882900?text=Hi%20Duocore%20Team%2C%20I%E2%80%99m%20interested%20in%20building%20a%20project.%20Can%20you%20help%20me%20with%20the%20details%3F" target="_blank" rel="noopener noreferrer" className="w-full sm:w-auto">
+            <a href="https://wa.me/917028350089?text=Hi%20Duocore%20Team%2C%20I%E2%80%99m%20interested%20in%20building%20a%20project.%20Can%20you%20help%20me%20with%20the%20details%3F" target="_blank" rel="noopener noreferrer" className="w-full sm:w-auto">
               <Button size="lg" className="h-16 md:h-18 w-full sm:px-14 bg-blue-600 hover:bg-blue-500 text-white font-black text-lg md:text-xl rounded-2xl shadow-3xl shadow-blue-600/40 transition-all hover:scale-[1.02] active:scale-95 flex items-center justify-center">
                 Start Your Project
               </Button>

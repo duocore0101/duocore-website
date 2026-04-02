@@ -39,7 +39,7 @@ export function Footer() {
                 { name: "About", href: "/about" },
                 { name: "Services", href: "/#services" },
                 { name: "Portfolio", href: "/#live-projects" },
-                { name: "Contact", href: "https://wa.me/919890882900?text=Hi%20Duocore%20Team%2C%20I%E2%80%99m%20interested%20in%20building%20a%20project.%20Can%20you%20help%20me%20with%20the%20details%3F", external: true }
+                { name: "Contact", href: "https://wa.me/917028350089?text=Hi%20Duocore%20Team%2C%20I%E2%80%99m%20interested%20in%20building%20a%20project.%20Can%20you%20help%20me%20with%20the%20details%3F", external: true }
               ].map((item) => (
                 <li key={item.name}>
                   {item.external ? (
@@ -74,7 +74,7 @@ export function Footer() {
                  </div>
                  <div>
                    <p className="text-xs font-black text-slate-400 uppercase tracking-widest mb-1">Call Us</p>
-                   <a href="tel:+919890882900" className="text-slate-700 font-bold hover:text-primary transition-colors">+91 98908 82900</a>
+                   <a href="tel:+917028350089" className="text-slate-700 font-bold hover:text-primary transition-colors">+91 70283 50089</a>
                  </div>
                </li>
             </ul>

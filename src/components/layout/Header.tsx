@@ -53,7 +53,7 @@ export function Header() {
           </nav>
 
           <div className="flex items-center gap-4">
-            <a href="https://wa.me/919890882900?text=Hi%20Duocore%20Team%2C%20I%E2%80%99m%20interested%20in%20building%20a%20project.%20Can%20you%20help%20me%20with%20the%20details%3F" target="_blank" rel="noopener noreferrer" className="hidden md:block">
+            <a href="https://wa.me/917028350089?text=Hi%20Duocore%20Team%2C%20I%E2%80%99m%20interested%20in%20building%20a%20project.%20Can%20you%20help%20me%20with%20the%20details%3F" target="_blank" rel="noopener noreferrer" className="hidden md:block">
               <Button className="bg-primary hover:bg-primary/90 text-white font-black rounded-xl px-8 shadow-lg shadow-primary/20">
                 Contact Us
               </Button>
@@ -128,7 +128,7 @@ export function Header() {
                           animate={{ opacity: 1, y: 0 }}
                           transition={{ delay: 0.5, duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
                         >
-                          <a href="https://wa.me/919890882900?text=Hi%20Duocore%20Team%2C%20I%E2%80%99m%20interested%20in%20building%20a%20project.%20Can%20you%20help%20me%20with%20the%20details%3F" target="_blank" rel="noopener noreferrer" onClick={() => setIsOpen(false)}>
+                          <a href="https://wa.me/917028350089?text=Hi%20Duocore%20Team%2C%20I%E2%80%99m%20interested%20in%20building%20a%20project.%20Can%20you%20help%20me%20with%20the%20details%3F" target="_blank" rel="noopener noreferrer" onClick={() => setIsOpen(false)}>
                             <Button className="w-full h-14 bg-primary hover:bg-primary/90 text-white font-black text-sm rounded-2xl shadow-xl shadow-primary/20 transition-all">
                               Contact Us
                             </Button>
