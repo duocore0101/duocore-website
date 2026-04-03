@@ -114,7 +114,7 @@ export function Testimonials() {
                 <Quote className="absolute top-8 right-8 h-20 w-20 md:top-10 md:right-10 md:h-32 md:w-32 text-slate-50 -z-10 group-hover:scale-110 transition-transform duration-700" />
                 
                 <div className="flex flex-row gap-4 sm:gap-6 md:gap-10 items-start md:items-start text-left mb-6 md:mb-10 relative z-10 w-full">
-                  <div className="h-14 w-14 sm:h-20 sm:w-20 md:h-24 md:w-24 border-2 md:border-4 border-white rounded-[1rem] sm:rounded-[1.5rem] md:rounded-[1.5rem] bg-primary flex-shrink-0 flex items-center justify-center text-xl md:text-3xl font-black text-white shadow-lg md:shadow-xl shadow-primary/20 overflow-hidden pointer-events-none">
+                  <div className="flex-shrink-0 h-14 w-14 sm:h-20 sm:w-20 md:h-24 md:w-24 border-2 md:border-4 border-white rounded-full bg-primary flex items-center justify-center text-xl md:text-3xl font-black text-white shadow-lg md:shadow-xl shadow-primary/20 overflow-hidden pointer-events-none">
                     {activeReview.image ? (
                       <img src={activeReview.image} className="h-full w-full object-cover" alt={activeReview.author} />
                     ) : (

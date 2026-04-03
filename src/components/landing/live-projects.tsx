@@ -456,7 +456,7 @@ export function LiveProjects() {
                                   
                                   <div className="flex flex-col gap-6 md:gap-10 relative z-10">
                                   <div className="flex items-center gap-4 md:gap-6">
-                                      <div className="h-16 w-16 md:h-20 md:w-20 rounded-2xl bg-primary text-white flex items-center justify-center font-black text-2xl shadow-xl overflow-hidden relative">
+                                      <div className="flex-shrink-0 h-16 w-16 md:h-20 md:w-20 rounded-full bg-primary text-white flex items-center justify-center font-black text-2xl shadow-xl overflow-hidden relative">
                                           {projectReviews[0].image ? (
                                             /* eslint-disable-next-line @next/next/no-img-element */
                                             <img src={projectReviews[0].image} className="h-full w-full object-cover" alt="Client" />
@@ -482,7 +482,7 @@ export function LiveProjects() {
                                   className="flex -space-x-3 cursor-pointer hover:translate-x-1 transition-transform group/stack"
                               >
                                 {[...Array(Math.min(projectReviews.length, 3))].map((_, i) => (
-                                    <div key={i} className="h-12 w-12 rounded-full border-2 border-white bg-slate-200 flex items-center justify-center text-slate-400 font-bold text-xs uppercase overflow-hidden relative">
+                                    <div key={i} className="flex-shrink-0 h-12 w-12 rounded-full border-2 border-white bg-slate-200 flex items-center justify-center text-slate-400 font-bold text-xs uppercase overflow-hidden relative">
                                         {projectReviews[i].image ? (
                                           /* eslint-disable-next-line @next/next/no-img-element */
                                           <img src={projectReviews[i].image} className="h-full w-full object-cover" alt="Client" />
@@ -532,7 +532,7 @@ export function LiveProjects() {
                               >
                                 <div className="flex flex-col gap-6">
                                     <div className="flex items-center gap-4">
-                                      <div className="h-14 w-14 rounded-xl bg-slate-50 flex items-center justify-center text-primary font-black text-xl overflow-hidden relative">
+                                      <div className="flex-shrink-0 h-14 w-14 rounded-full bg-slate-50 flex items-center justify-center text-primary font-black text-xl overflow-hidden relative">
                                           {rev.image ? (
                                             /* eslint-disable-next-line @next/next/no-img-element */
                                             <img src={rev.image} className="h-full w-full object-cover" alt="Client" />
