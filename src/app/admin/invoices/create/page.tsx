@@ -21,6 +21,7 @@ function InvoiceForm() {
   const [title, setTitle] = useState("");
   const [clientId, setClientId] = useState("");
   const [issueDate, setIssueDate] = useState(new Date().toISOString().split('T')[0]);
+  const [paymentReceived, setPaymentReceived] = useState(0);
   
   const [nextInvoiceNumber, setNextInvoiceNumber] = useState("INV-0001");
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -68,6 +69,7 @@ function InvoiceForm() {
           setTitle(data.title || "");
           setClientId(data.client_id || "");
           setNextInvoiceNumber(data.number || "");
+          setPaymentReceived(data.payment_received || 0);
           
           if (data.date) {
             // Convert en-GB string to YYYY-MM-DD if needed, else fallback
@@ -101,7 +103,7 @@ function InvoiceForm() {
   const subtotal = calculateSubtotal();
   // Matching quotation logic where tax = 0 for consistency 
   const tax = 0; 
-  const grandTotal = subtotal + tax;
+  const grandTotal = Math.max(0, subtotal + tax - paymentReceived);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -122,6 +124,7 @@ function InvoiceForm() {
         due: "",
         subtotal: subtotal,
         tax: tax,
+        payment_received: paymentReceived,
         total: grandTotal,
         items: items
       }).eq('id', editId);
@@ -147,6 +150,7 @@ function InvoiceForm() {
         due: "",
         subtotal: subtotal,
         tax: tax,
+        payment_received: paymentReceived,
         total: grandTotal,
         items: items,
         status: "Unpaid"
@@ -306,6 +310,17 @@ function InvoiceForm() {
                 <div className="flex justify-between text-sm">
                   <span className="text-muted-foreground">Subtotal</span>
                   <span className="font-medium">₹{subtotal.toFixed(2)}</span>
+                </div>
+                <div className="flex justify-between items-center text-sm pt-2">
+                  <span className="text-muted-foreground whitespace-nowrap">Payment Received (₹)</span>
+                  <Input 
+                    type="number" 
+                    min="0"
+                    step="0.01"
+                    className="w-32 h-8 text-right bg-background border-border" 
+                    value={paymentReceived === 0 ? '' : paymentReceived}
+                    onChange={(e) => setPaymentReceived(parseFloat(e.target.value) || 0)}
+                  />
                 </div>
                 <div className="flex justify-between text-lg font-bold border-t border-border pt-3 mt-3">
                   <span>Grand Total</span>

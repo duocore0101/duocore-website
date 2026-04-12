@@ -32,6 +32,7 @@ interface Invoice {
   clientName: string;
   clientPhone: string;
   clientEmail: string;
+  payment_received: number;
 }
 
 export default function InvoicesPage() {
@@ -113,6 +114,7 @@ export default function InvoicesPage() {
       items: invoice.items || [],
       subtotal: invoice.subtotal || invoice.total,
       tax: invoice.tax || 0,
+      paymentReceived: invoice.payment_received || 0,
       grandTotal: invoice.total,
       logo: logoBase64,
       signatures: signaturesBase64.filter((s): s is string => s !== undefined)
@@ -256,6 +258,12 @@ export default function InvoicesPage() {
                     <span className="text-muted-foreground">Subtotal:</span>
                     <span>₹{(previewInvoice.subtotal || previewInvoice.total).toFixed(2)}</span>
                   </div>
+                  {previewInvoice.payment_received ? (
+                    <div className="flex justify-between text-sm">
+                      <span className="text-muted-foreground">Payment Received:</span>
+                      <span className="text-muted-foreground">-₹{previewInvoice.payment_received.toFixed(2)}</span>
+                    </div>
+                  ) : null}
                   <div className="flex justify-between font-bold text-lg pt-2 border-t border-border">
                     <span>Total:</span>
                     <span className="text-primary">₹{previewInvoice.total.toFixed(2)}</span>

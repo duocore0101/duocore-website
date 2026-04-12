@@ -20,6 +20,7 @@ function QuotationForm() {
   const [items, setItems] = useState([{ id: 1, service: "", quantity: 1, unitPrice: 0 }]);
   const [title, setTitle] = useState("");
   const [clientId, setClientId] = useState("");
+  const [paymentReceived, setPaymentReceived] = useState(0);
   const [nextQuoteNumber, setNextQuoteNumber] = useState("QT-0001");
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [clientsList, setClientsList] = useState<any[]>([]);
@@ -68,6 +69,7 @@ function QuotationForm() {
           setTitle(data.title);
           setClientId(data.client_id);
           setNextQuoteNumber(data.number);
+          setPaymentReceived(data.payment_received || 0);
           
           // The items column in Supabase is JSONB, so it comes back directly as an array of objects
           if (data.items && Array.isArray(data.items) && data.items.length > 0) {
@@ -91,7 +93,7 @@ function QuotationForm() {
   };
 
   const subtotal = calculateSubtotal();
-  const grandTotal = subtotal;
+  const grandTotal = Math.max(0, subtotal - paymentReceived);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -104,6 +106,7 @@ function QuotationForm() {
         title: title || "Quotation",
         subtotal: subtotal,
         tax: 0,
+        payment_received: paymentReceived,
         total: grandTotal,
         items: items
       }).eq('id', editId);
@@ -128,6 +131,7 @@ function QuotationForm() {
         date: new Date().toLocaleDateString('en-GB'),
         subtotal: subtotal,
         tax: 0,
+        payment_received: paymentReceived,
         total: grandTotal,
         items: items
       }]);
@@ -282,6 +286,17 @@ function QuotationForm() {
                 <div className="flex justify-between text-sm">
                   <span className="text-muted-foreground">Subtotal</span>
                   <span className="font-medium">₹{subtotal.toFixed(2)}</span>
+                </div>
+                <div className="flex justify-between items-center text-sm pt-2">
+                  <span className="text-muted-foreground whitespace-nowrap">Payment Received (₹)</span>
+                  <Input 
+                    type="number" 
+                    min="0"
+                    step="0.01"
+                    className="w-32 h-8 text-right bg-background border-border" 
+                    value={paymentReceived === 0 ? '' : paymentReceived}
+                    onChange={(e) => setPaymentReceived(parseFloat(e.target.value) || 0)}
+                  />
                 </div>
                 <div className="flex justify-between text-lg font-bold border-t border-border pt-3 mt-3">
                   <span>Grand Total</span>

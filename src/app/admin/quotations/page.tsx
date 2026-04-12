@@ -102,8 +102,9 @@ export default function QuotationsPage() {
         address: "123 Client St."
       },
       items: quote.items || [],
-      subtotal: quote.total,
+      subtotal: quote.subtotal || quote.total,
       tax: 0,
+      paymentReceived: quote.payment_received || 0,
       grandTotal: quote.total,
       logo: logoBase64,
       signatures: signaturesBase64.filter((s): s is string => s !== undefined),
@@ -234,8 +235,14 @@ export default function QuotationsPage() {
                 <div className="w-48 space-y-2">
                   <div className="flex justify-between text-sm">
                     <span className="text-muted-foreground">Subtotal:</span>
-                    <span>₹{previewQuote.total.toFixed(2)}</span>
+                    <span>₹{(previewQuote.subtotal || previewQuote.total).toFixed(2)}</span>
                   </div>
+                  {previewQuote.payment_received ? (
+                    <div className="flex justify-between text-sm">
+                      <span className="text-muted-foreground">Payment Received:</span>
+                      <span className="text-muted-foreground">-₹{previewQuote.payment_received.toFixed(2)}</span>
+                    </div>
+                  ) : null}
                   <div className="flex justify-between font-bold text-lg pt-2 border-t border-border">
                     <span>Total:</span>
                     <span className="text-primary">₹{previewQuote.total.toFixed(2)}</span>

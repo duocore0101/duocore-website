@@ -21,6 +21,7 @@ export interface DocumentData {
   }>;
   subtotal: number;
   tax: number;
+  paymentReceived?: number;
   grandTotal: number;
   bankDetails?: {
     accountName: string;
@@ -172,19 +173,27 @@ export function generatePDF(data: DocumentData) {
   doc.setTextColor(...textColor);
   doc.text(`INR ${data.subtotal.toFixed(2)}`, pageWidth - 14, finalY, { align: "right" });
 
-  let grandTotalY = finalY + 12;
+  let nextSummaryY = finalY + 8;
 
   if (data.tax > 0) {
     doc.setTextColor(...mutedTextColor);
-    doc.text("Tax (10%):", summaryX, finalY + 8);
+    doc.text("Tax (10%):", summaryX, nextSummaryY);
     doc.setTextColor(...textColor);
-    doc.text(`INR ${data.tax.toFixed(2)}`, pageWidth - 14, finalY + 8, { align: "right" });
-    grandTotalY = finalY + 12;
-  } else {
-    grandTotalY = finalY + 4;
+    doc.text(`INR ${data.tax.toFixed(2)}`, pageWidth - 14, nextSummaryY, { align: "right" });
+    nextSummaryY += 8;
+  }
+
+  if (data.paymentReceived && data.paymentReceived > 0) {
+    doc.setTextColor(...mutedTextColor);
+    doc.text("Payment Received:", summaryX, nextSummaryY);
+    doc.setTextColor(...textColor);
+    doc.text(`-INR ${data.paymentReceived.toFixed(2)}`, pageWidth - 14, nextSummaryY, { align: "right" });
+    nextSummaryY += 8;
   }
 
   // Grand Total Line
+  const grandTotalY = nextSummaryY;
+
   doc.setFillColor(...primaryColor);
   doc.rect(summaryX - 5, grandTotalY, 90, 10, 'F');
 
@@ -223,10 +232,12 @@ export function generatePDF(data: DocumentData) {
   doc.setFont("helvetica", "normal");
   doc.setTextColor(...textColor);
   const terms = data.terms || [
-    "1. This quotation is valid for 30 days from the date of issue.",
-    "2. 50% advance payment is required to initiate the project.",
-    "3. Remaining 50% payment must be cleared upon project delivery.",
-    "4. Any additional requirements will be billed separately."
+    "1. 50% advance payment is required before starting the project.",
+    "2. Remaining 50% must be paid before final delivery / website going live.",
+    "3. All payments made are strictly non-refundable.",
+    "4. Once the project has started, no refund will be issued under any circumstances.",
+    "5. This invoice covers only the agreed features and services.",
+    "6. Any additional work will be charged separately."
   ];
 
   terms.forEach((term, index) => {
