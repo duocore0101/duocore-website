@@ -100,7 +100,7 @@ export function Header() {
                   <div className="absolute top-0 right-0 w-64 h-64 bg-primary/10 rounded-full blur-[80px] -z-10 translate-x-1/3 -translate-y-1/3" />
                   <div className="absolute bottom-0 left-0 w-64 h-64 bg-blue-500/5 rounded-full blur-[80px] -z-10 -translate-x-1/3 translate-y-1/3" />
 
-                  <div className="flex items-center justify-end px-6 py-6 border-b border-slate-100/50">
+                  <div className="flex items-center justify-end px-6 py-6 border-b border-slate-100/50 shrink-0">
                     <Button 
                       variant="ghost" 
                       onClick={() => setIsOpen(false)}
@@ -111,7 +111,7 @@ export function Header() {
                     </Button>
                   </div>
 
-                  <div className="flex flex-col h-full pt-10 pb-10 px-8">
+                  <div className="flex flex-col flex-1 overflow-y-auto pt-8 pb-10 px-8">
                     <div className="space-y-1 mb-10">
                       <span className="text-[10px] font-black tracking-[0.3em] uppercase text-primary mb-6 block opacity-60">Navigation</span>
                       <nav className="flex flex-col gap-3">
