@@ -32,7 +32,7 @@ export default function StaffDashboardPage() {
   const [currentStaffName, setCurrentStaffName] = useState<string | null>(null);
   
   const [staffList, setStaffList] = useState<Staff[]>([]);
-  const [tasks, setTasks] = useState<Task[]>([]);
+
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {

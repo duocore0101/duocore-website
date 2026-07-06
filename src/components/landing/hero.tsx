@@ -2,9 +2,9 @@
 
 import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
-import { Target, Rocket, Cloud, ShieldCheck, Zap, ArrowRight, HeartPulse, GraduationCap, ShoppingCart, Landmark, Truck, Building2, BrainCircuit } from "lucide-react";
+import { Target, Rocket, Cloud, ShieldCheck, Zap, ArrowRight, HeartPulse, GraduationCap, ShoppingCart, Landmark, Truck, Building2 } from "lucide-react";
 import Link from "next/link";
-import Image from "next/image";
+
 
 export function Hero() {
   const container = {
