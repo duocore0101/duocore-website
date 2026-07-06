@@ -2,93 +2,99 @@
 
 import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
-import { Sparkles } from "lucide-react";
+import { Target, Rocket, Cloud, ShieldCheck, Zap, ArrowRight, HeartPulse, GraduationCap, ShoppingCart, Landmark, Truck, Building2, BrainCircuit } from "lucide-react";
 import Link from "next/link";
+import Image from "next/image";
 
 export function Hero() {
   const container = {
     hidden: { opacity: 0 },
     show: {
       opacity: 1,
-      transition: {
-        staggerChildren: 0.1,
-        delayChildren: 0.3
-      }
+      transition: { staggerChildren: 0.1, delayChildren: 0.2 }
     }
   };
 
   const item = {
-    hidden: { opacity: 0, x: -30 },
-    show: { opacity: 1, x: 0, transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] as [number, number, number, number] } }
+    hidden: { opacity: 0, y: 20 },
+    show: { opacity: 1, y: 0, transition: { duration: 0.6, ease: [0.16, 1, 0.3, 1] as [number, number, number, number] } }
   };
 
+  const features = [
+    { icon: <Rocket className="h-5 w-5 text-blue-400" />, title: "Scalable", sub: "Solutions" },
+    { icon: <Cloud className="h-5 w-5 text-blue-400" />, title: "Cloud", sub: "Ready" },
+    { icon: <ShieldCheck className="h-5 w-5 text-blue-400" />, title: "Secure", sub: "& Reliable" },
+    { icon: <Zap className="h-5 w-5 text-blue-400" />, title: "High", sub: "Performance" },
+  ];
+
+  const industries = [
+    { icon: <HeartPulse className="h-6 w-6" />, name: "Healthcare" },
+    { icon: <GraduationCap className="h-6 w-6" />, name: "Education" },
+    { icon: <ShoppingCart className="h-6 w-6" />, name: "E-commerce" },
+    { icon: <Landmark className="h-6 w-6" />, name: "Finance" },
+    { icon: <Truck className="h-6 w-6" />, name: "Logistics" },
+    { icon: <Building2 className="h-6 w-6" />, name: "Real Estate" },
+  ];
+
   return (
-    <section className="relative min-h-[70vh] flex items-center overflow-hidden pt-28 md:pt-24 pb-20 bg-[#020617]">
-      {/* BACKGROUND IMAGE WITH OVERLAY */}
-      <div className="absolute inset-0 z-0">
-        <motion.div 
-            initial={{ scale: 1.05, opacity: 0 }}
-            animate={{ scale: 1, opacity: 0.5 }}
-            transition={{ duration: 1.5, ease: "easeOut" }}
-            className="absolute inset-0 bg-cover bg-center bg-no-repeat"
-            style={{ backgroundImage: "url('/hero-ai.png')" }}
-        />
-        <div className="absolute inset-0 bg-gradient-to-r from-slate-950 via-slate-950/90 to-transparent" />
-        <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-transparent to-transparent" />
-      </div>
+    <section className="relative min-h-screen flex items-center overflow-hidden pt-32 pb-20 bg-[#040814] bg-cover bg-center bg-no-repeat" style={{ backgroundImage: "url('/laptop-hero.png')" }}>      <div className="w-full max-w-[1800px] mx-auto px-6 md:px-12 lg:px-20 relative z-10">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center max-w-full">
+          {/* LEFT COLUMN */}
+          <motion.div variants={container} initial="hidden" animate="show" className="lg:col-span-5 max-w-2xl pl-0 xl:pl-4">
+            <motion.div variants={item} className="mb-6">
+              <span className="inline-flex items-center rounded-full px-4 py-1.5 text-[10px] font-bold bg-transparent text-blue-400 border border-blue-900/50 tracking-[0.15em] uppercase">
+                <Target className="mr-2 h-3 w-3" />
+                Intelligence Driven Engineering
+              </span>
+            </motion.div>
 
-      {/* GLOWING ACCENTS */}
-      <div className="absolute top-1/4 left-0 w-[500px] h-[500px] bg-primary/10 rounded-full blur-[120px] -z-0 opacity-40" />
-      
-      <div className="container px-4 md:px-6 relative z-10">
-        <motion.div 
-          variants={container}
-          initial="hidden"
-          animate="show"
-          className="max-w-3xl"
-        >
-          <motion.div variants={item} className="mb-4">
-            <span className="inline-flex items-center rounded-full px-4 py-1.5 text-[9px] font-black bg-white/5 backdrop-blur-md text-blue-400 border border-white/10 tracking-[0.2em] uppercase">
-              <Sparkles className="mr-2 h-3 w-3 animate-pulse" />
-              Intelligence Driven Engineering
-            </span>
+            <motion.h1 variants={item} className="text-4xl sm:text-5xl md:text-6xl font-black tracking-tight mb-6 leading-[1.1] text-white">
+              We Build Software <br />
+              That Grows <span className="text-blue-500">Your <br /> Business.</span>
+            </motion.h1>
+
+            <motion.p variants={item} className="text-slate-400 max-w-lg text-lg font-medium leading-relaxed mb-8">
+              We don&apos;t just develop software — we craft scalable, high-performance systems that solve real-world problems and drive business growth.
+            </motion.p>
+
+            <motion.div variants={item} className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-10">
+              {features.map((feat, idx) => (
+                <div key={idx} className="flex flex-col items-start p-4 rounded-2xl bg-white/5 border border-white/5 backdrop-blur-sm">
+                  <div className="mb-2">{feat.icon}</div>
+                  <span className="text-sm font-bold text-white leading-tight">{feat.title}</span>
+                  <span className="text-xs text-slate-400">{feat.sub}</span>
+                </div>
+              ))}
+            </motion.div>
+
+            <motion.div variants={item} className="flex flex-col sm:flex-row gap-4 mb-16">
+              <a href="https://wa.me/917028350089" target="_blank" rel="noopener noreferrer">
+                <Button size="lg" className="w-full sm:w-auto h-14 px-8 bg-blue-600 hover:bg-blue-500 text-white font-bold text-base rounded-xl transition-all flex items-center justify-center gap-2 shadow-lg shadow-blue-500/20">
+                  Start Your Project <ArrowRight className="h-4 w-4" />
+                </Button>
+              </a>
+              <Link href="/#live-projects">
+                <Button size="lg" variant="outline" className="w-full sm:w-auto h-14 px-8 border-white/20 bg-transparent hover:bg-white/5 text-white hover:text-white font-bold text-base rounded-xl transition-all flex items-center justify-center gap-2">
+                  Explore Our Work <ArrowRight className="h-4 w-4" />
+                </Button>
+              </Link>
+            </motion.div>
+
+            <motion.div variants={item} className="border-t border-white/10 pt-8">
+              <p className="text-[10px] uppercase tracking-widest font-bold text-slate-500 mb-6">
+                Trusted by businesses across industries
+              </p>
+              <div className="flex flex-wrap gap-6 sm:gap-10">
+                {industries.map((ind, idx) => (
+                  <div key={idx} className="flex flex-col items-center gap-2 text-slate-400 hover:text-blue-400 transition-colors cursor-default">
+                    {ind.icon}
+                    <span className="text-[10px] font-semibold">{ind.name}</span>
+                  </div>
+                ))}
+              </div>
+            </motion.div>
           </motion.div>
-
-          <motion.h1 
-            variants={item}
-            className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black tracking-normal mb-4 md:mb-6 leading-[1.2] text-white font-[family-name:var(--font-michroma)]"
-          >
-            We Build Software That Grows <span className="text-blue-500">Your Business.</span>
-          </motion.h1>
-
-          <motion.div variants={item} className="space-y-6 mb-10">
-            <p className="text-slate-400 max-w-2xl text-lg md:text-xl font-medium tracking-tight leading-snug">
-              We don’t just develop software — we craft scalable, high-performance systems that solve real-world problems and drive business growth.
-            </p>
-            <p className="text-blue-400 font-black text-xs uppercase tracking-[0.2em]">
-               From Idea to Production — We Handle Everything
-            </p>
-            <p className="text-slate-500 max-w-2xl text-sm md:text-base font-medium leading-relaxed italic">
-              At Duocore Software Company, we turn your vision into a fully functional, cloud-ready product using modern technologies and industry-proven architecture.
-            </p>
-          </motion.div>
-
-          <motion.div 
-            variants={item}
-            className="flex flex-col sm:flex-row gap-4 md:gap-8 w-full sm:w-auto"
-          >
-            <a href="https://wa.me/917028350089?text=Hi%20Duocore%20Team%2C%20I%E2%80%99m%20interested%20in%20building%20a%20project.%20Can%20you%20help%20me%20with%20the%20details%3F" target="_blank" rel="noopener noreferrer" className="w-full sm:w-auto">
-              <Button size="lg" className="h-16 md:h-18 w-full sm:px-14 bg-blue-600 hover:bg-blue-500 text-white font-black text-lg md:text-xl rounded-2xl shadow-3xl shadow-blue-600/40 transition-all hover:scale-[1.02] active:scale-95 flex items-center justify-center">
-                Start Your Project
-              </Button>
-            </a>
-            <Link href="/#live-projects" className="w-full sm:w-auto">
-              <Button size="lg" variant="outline" className="h-16 md:h-18 w-full sm:px-14 border-white/20 bg-white/5 backdrop-blur-md hover:bg-white/10 text-white hover:text-white font-bold text-lg md:text-xl rounded-2xl transition-all hover:border-white/40 shadow-xl group">
-                Explore Our Work
-              </Button>
-            </Link>
-          </motion.div>
-        </motion.div>
+        </div>
       </div>
     </section>
   );

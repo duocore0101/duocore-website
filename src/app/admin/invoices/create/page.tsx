@@ -20,7 +20,9 @@ function InvoiceForm() {
   const [items, setItems] = useState([{ id: Date.now(), service: "", quantity: 1, unitPrice: 0 }]);
   const [title, setTitle] = useState("");
   const [clientId, setClientId] = useState("");
-  const [issueDate, setIssueDate] = useState(new Date().toISOString().split('T')[0]);
+  const today = new Date();
+  const todayStr = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
+  const [issueDate, setIssueDate] = useState(todayStr);
   const [paymentReceived, setPaymentReceived] = useState(0);
   
   const [nextInvoiceNumber, setNextInvoiceNumber] = useState("INV-0001");

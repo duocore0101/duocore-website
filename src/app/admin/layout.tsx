@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import Image from "next/image";
-import { LayoutDashboard, Users, FileText, FileSpreadsheet, LogOut, Wallet } from "lucide-react";
+import { LayoutDashboard, Users, FileText, FileSpreadsheet, LogOut, Wallet, UserPlus, CheckSquare } from "lucide-react";
 import { createBrowserClient } from "@supabase/ssr";
 import * as React from "react";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
@@ -20,6 +20,8 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
 
   const navItems = [
     { label: "Overview", icon: LayoutDashboard, href: "/admin" },
+    { label: "Staff Requests", icon: UserPlus, href: "/admin/staff-requests" },
+    { label: "Staff Tasks", icon: CheckSquare, href: "/admin/staff-tasks" },
     { label: "Tally", icon: Wallet, href: "/admin/tally" },
     { label: "Clients", icon: Users, href: "/admin/clients" },
     { label: "Live Projects", icon: LayoutDashboard, href: "/admin/projects" },

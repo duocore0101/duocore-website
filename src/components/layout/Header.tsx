@@ -8,12 +8,15 @@ import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import { X, ArrowUpRight } from "lucide-react"
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
+import { Lock } from "lucide-react"
 
 const navLinks = [
-  { name: "Home", href: "/" },
-  { name: "About", href: "/about" },
-  { name: "Services", href: "/#services" },
-  { name: "Portfolio", href: "/#live-projects" },
+  { name: "HOME", href: "/" },
+  { name: "ABOUT", href: "/about" },
+  { name: "SERVICES", href: "/#services" },
+  { name: "PORTFOLIO", href: "/#live-projects" },
+  { name: "TECHNOLOGIES", href: "/#technologies" },
+  { name: "BLOG", href: "/blog" },
 ]
 
 export function Header() {
@@ -24,17 +27,17 @@ export function Header() {
       <header
         className={cn(
           "fixed top-0 left-0 right-0 z-[100] transition-all duration-300",
-          "glass-nav-premium py-4 border-b border-white/10 shadow-sm"
+          "bg-white/90 backdrop-blur-md py-4 border-b border-slate-200 shadow-sm"
         )}
       >
-        <div className="container px-4 md:px-6 flex items-center justify-between">
+        <div className="w-full max-w-[1800px] mx-auto px-6 md:px-12 lg:px-20 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-2 group relative z-[110]">
             <Image
               src="/logo.png"
               alt="Duocore Softwares Logo"
-              width={180}
-              height={45}
-              className="object-contain h-8 w-auto transition-transform group-hover:scale-105"
+              width={200}
+              height={50}
+              className="object-contain h-10 w-auto transition-transform group-hover:scale-105"
             />
           </Link>
 
@@ -44,23 +47,34 @@ export function Header() {
               <Link
                 key={link.name}
                 href={link.href}
-                className="text-sm font-black text-slate-600 hover:text-primary transition-all tracking-widest uppercase relative group"
+                className={cn(
+                  "text-[13px] font-semibold transition-all tracking-wider relative group",
+                  link.name === "HOME" ? "text-slate-900" : "text-slate-600 hover:text-slate-900"
+                )}
               >
                 {link.name}
-                <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-primary transition-all group-hover:w-full" />
+                <span className={cn(
+                  "absolute -bottom-1 left-0 h-[2px] transition-all",
+                  link.name === "HOME" ? "w-full bg-blue-500" : "w-0 bg-blue-500 group-hover:w-full"
+                )} />
               </Link>
             ))}
           </nav>
 
           <div className="flex items-center gap-4">
             <a href="https://wa.me/917028350089?text=Hi%20Duocore%20Team%2C%20I%E2%80%99m%20interested%20in%20building%20a%20project.%20Can%20you%20help%20me%20with%20the%20details%3F" target="_blank" rel="noopener noreferrer" className="hidden md:block">
-              <Button className="bg-primary hover:bg-primary/90 text-white font-black rounded-xl px-8 shadow-lg shadow-primary/20">
-                Contact Us
+              <Button className="bg-blue-600 hover:bg-blue-500 text-white font-semibold rounded-xl px-6 shadow-lg shadow-blue-600/20 flex items-center gap-2">
+                Contact Us <ArrowUpRight className="h-4 w-4" />
               </Button>
             </a>
             <Link href="/admin/login" className="hidden md:block">
-              <Button variant="outline" className="border-slate-200 text-slate-700 font-bold rounded-xl px-6">
-                Admin Login
+              <Button variant="outline" className="border-slate-200 bg-transparent hover:bg-slate-50 text-slate-700 hover:text-slate-900 font-semibold rounded-xl px-5 flex items-center gap-2">
+                Admin Login <Lock className="h-3 w-3" />
+              </Button>
+            </Link>
+            <Link href="/staff/login" className="hidden md:block">
+              <Button variant="outline" className="border-slate-200 bg-transparent hover:bg-slate-50 text-slate-700 hover:text-slate-900 font-semibold rounded-xl px-5 flex items-center gap-2">
+                Staff Login <Lock className="h-3 w-3" />
               </Button>
             </Link>
 
@@ -136,6 +150,11 @@ export function Header() {
                           <Link href="/admin/login" onClick={() => setIsOpen(false)}>
                             <Button variant="outline" className="w-full h-14 border-slate-200 text-slate-700 hover:bg-slate-50 font-bold text-sm rounded-2xl transition-all">
                               Admin Login
+                            </Button>
+                          </Link>
+                          <Link href="/staff/login" onClick={() => setIsOpen(false)}>
+                            <Button variant="outline" className="w-full h-14 border-slate-200 text-slate-700 hover:bg-slate-50 font-bold text-sm rounded-2xl transition-all">
+                              Staff Login
                             </Button>
                           </Link>
                         </motion.div>

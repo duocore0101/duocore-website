@@ -43,7 +43,9 @@ export default function TallyPage() {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [dialogType, setDialogType] = useState<'credit' | 'expense' | 'pending'>('credit');
   const [editItem, setEditItem] = useState<TallyCredit | TallyExpense | TallyPending | null>(null);
-  const [formData, setFormData] = useState({ name: '', amount: '', date: new Date().toISOString().split('T')[0] });
+  const today = new Date();
+  const todayStr = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
+  const [formData, setFormData] = useState({ name: '', amount: '', date: todayStr });
 
   // Distribution calculations
   const totalCredits = credits.reduce((acc, c) => acc + Number(c.amount), 0);
@@ -81,7 +83,9 @@ export default function TallyPage() {
         date: type === 'pending' ? (item as TallyPending).due_date : (item as TallyCredit | TallyExpense).date 
       });
     } else {
-      setFormData({ name: '', amount: '', date: new Date().toISOString().split('T')[0] });
+      const today = new Date();
+      const todayStr = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
+      setFormData({ name: '', amount: '', date: todayStr });
     }
     setIsDialogOpen(true);
   };
