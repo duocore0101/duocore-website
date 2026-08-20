@@ -65,7 +65,7 @@ export function Footer() {
                  </div>
                  <div>
                    <p className="text-xs font-black text-slate-400 uppercase tracking-widest mb-1">Email Us</p>
-                   <a href="mailto:duocore0101@gmail.com" className="text-slate-700 font-bold hover:text-primary transition-colors">duocore0101@gmail.com</a>
+                   <a href="mailto:info@duocoresoftware.com" className="text-slate-700 font-bold hover:text-primary transition-colors">info@duocoresoftware.com</a>
                  </div>
                </li>
                <li className="flex items-start gap-4 group">

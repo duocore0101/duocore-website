@@ -158,7 +158,7 @@ export default function PrivacyPolicy() {
               </p>
               <div className="bg-slate-50 border border-slate-100 rounded-xl p-6">
                 <p className="font-bold text-slate-900">
-                  Email: <a href="mailto:duocore0101@gmail.com" className="text-primary hover:underline font-medium">duocore0101@gmail.com</a>
+                  Email: <a href="mailto:info@duocoresoftware.com" className="text-primary hover:underline font-medium">info@duocoresoftware.com</a>
                 </p>
               </div>
             </div>
