@@ -86,7 +86,7 @@ export function Footer() {
             © {new Date().getFullYear()} Duocore Softwares. All rights reserved.
           </p>
           <div className="flex gap-10">
-            <Link href="/privacy" className="text-sm font-bold text-slate-400 hover:text-primary transition-colors">Privacy Policy</Link>
+            <Link href="/privacy-policy" className="text-sm font-bold text-slate-400 hover:text-primary transition-colors">Privacy Policy</Link>
             <Link href="/terms" className="text-sm font-bold text-slate-400 hover:text-primary transition-colors">Terms of Service</Link>
           </div>
         </div>
