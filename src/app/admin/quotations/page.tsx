@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Plus, Search, Download, Trash2, Edit } from "lucide-react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import Link from "next/link";
 import { generatePDF } from "@/utils/pdfGenerator";
 import { createClient } from "@/lib/supabase/client";
@@ -16,6 +17,7 @@ export default function QuotationsPage() {
   const [search, setSearch] = useState("");
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [previewQuote, setPreviewQuote] = useState<any>(null);
+  const [selectedLayout, setSelectedLayout] = useState<"3-partners" | "2-partners">("3-partners");
   
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [quotations, setQuotations] = useState<any[]>([]);
@@ -84,11 +86,18 @@ export default function QuotationsPage() {
 
     // Load assets from public folder
     const logoBase64 = await urlToBase64('/logo-new.png');
-    const signaturesBase64 = await Promise.all([
-      urlToBase64('/sign-kishor.png'),
-      urlToBase64('/sign-saalim.png'),
-      urlToBase64('/sign-ikhlas.png'),
-    ]);
+    let signatureUrls = [
+      '/sign-kishor.png',
+      '/sign-saalim.png',
+      '/sign-ikhlas.png'
+    ];
+    if (selectedLayout === "2-partners") {
+      signatureUrls = [
+        '/sign-saalim.png',
+        '/sign-ikhlas.png'
+      ];
+    }
+    const signaturesBase64 = await Promise.all(signatureUrls.map(urlToBase64));
 
     generatePDF({
       type: "Quotation",
@@ -108,7 +117,8 @@ export default function QuotationsPage() {
       grandTotal: quote.total,
       logo: logoBase64,
       signatures: signaturesBase64.filter((s): s is string => s !== undefined),
-      title: quote.title
+      title: quote.title,
+      layout: selectedLayout
     });
   };
 
@@ -175,7 +185,7 @@ export default function QuotationsPage() {
       </div>
 
       <Dialog open={!!previewQuote} onOpenChange={(open) => !open && setPreviewQuote(null)}>
-        <DialogContent className="sm:max-w-[600px] bg-card border-border">
+        <DialogContent className="sm:max-w-[600px] bg-card border-border max-h-[90vh] overflow-y-auto">
           <DialogHeader>
             <DialogTitle className="text-2xl">Quotation Preview</DialogTitle>
             <DialogDescription>
@@ -261,7 +271,18 @@ export default function QuotationsPage() {
                       <Edit className="mr-2 h-4 w-4" /> Edit
                     </Button>
                   </Link>
-                  <Button className="flex-1 sm:flex-none glow-primary" onClick={() => handleDownload(previewQuote)}>
+                  <div className="w-full sm:w-48 flex-none">
+                    <Select value={selectedLayout} onValueChange={(val) => setSelectedLayout(val as "3-partners" | "2-partners")}>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select Layout" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="3-partners">3 Partners Layout</SelectItem>
+                        <SelectItem value="2-partners">2 Partners Layout</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <Button className="flex-1 sm:flex-none glow-primary" onClick={(e) => handleDownload(previewQuote, e)}>
                     <Download className="mr-2 h-4 w-4" /> Download
                   </Button>
                 </div>

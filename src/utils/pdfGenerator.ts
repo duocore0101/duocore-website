@@ -34,6 +34,7 @@ export interface DocumentData {
   logo?: string; // base64 string
   signatures?: string[]; // array of base64 strings
   title?: string;
+  layout?: "3-partners" | "2-partners";
 }
 
 export function generatePDF(data: DocumentData) {
@@ -108,7 +109,7 @@ export function generatePDF(data: DocumentData) {
   doc.setFont("helvetica", "normal");
   doc.text("Junnar, Pune 410502", 14, 67);
   doc.text("Maharashtra", 14, 72);
-  doc.text("duocore0101@gmail.com", 14, 77);
+  doc.text("info@duocoresoftware.com", 14, 77);
 
   // To Section
   doc.setTextColor(...mutedTextColor);
@@ -131,6 +132,7 @@ export function generatePDF(data: DocumentData) {
   // Items Table
   autoTable(doc, {
     startY: 90,
+    margin: { bottom: 85 },
     head: [['SERVICE', 'QTY', 'UNIT PRICE', 'TOTAL']],
     body: data.items.map(item => [
       item.service,
@@ -162,18 +164,55 @@ export function generatePDF(data: DocumentData) {
   });
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const finalY = (doc as any).lastAutoTable.finalY + 10;
+  const finalY = (doc as any).lastAutoTable.finalY;
+
+  let currentY = finalY + 10;
+
+  // Determine Bank Info
+  let defaultBankInfo = {
+    accountName: "KISHOR MARUTI SHELAR",
+    accountNumber: "313402000000009",
+    bankName: "Indian Overseas Bank, NEDUMANAGAD",
+    ifscCode: "IOBA0003143"
+  };
+  if (data.layout === "2-partners") {
+    defaultBankInfo = {
+      accountName: "Mohammad Saalim Mujahid Khan",
+      accountNumber: "0274101023801",
+      bankName: "CANARA BANK",
+      ifscCode: "CNRB0000274"
+    };
+  }
+  const bankInfo = data.bankDetails || defaultBankInfo;
+
+  // Calculate heights to see if we need a new page for summary and terms
+  let summaryHeight = 15;
+  if (data.tax > 0) summaryHeight += 8;
+  if (data.paymentReceived && data.paymentReceived > 0) summaryHeight += 8;
+
+  let termsHeight = 10 + ((data.terms || []).length * 8);
+  if (data.layout === "2-partners") {
+    termsHeight += 35; // Add space for Bank Details below terms
+  }
+  const neededHeight = Math.max(summaryHeight, termsHeight) + 10;
+
+  const footerStartY = doc.internal.pageSize.height - 80;
+
+  if (currentY + neededHeight > footerStartY) {
+    doc.addPage();
+    currentY = 20; // top margin for new page
+  }
 
   // Pricing Summary Box
   const summaryX = pageWidth - 80;
 
   doc.setFontSize(10);
   doc.setTextColor(...mutedTextColor);
-  doc.text("Subtotal:", summaryX, finalY);
+  doc.text("Subtotal:", summaryX, currentY);
   doc.setTextColor(...textColor);
-  doc.text(`INR ${data.subtotal.toFixed(2)}`, pageWidth - 14, finalY, { align: "right" });
+  doc.text(`INR ${data.subtotal.toFixed(2)}`, pageWidth - 14, currentY, { align: "right" });
 
-  let nextSummaryY = finalY + 8;
+  let nextSummaryY = currentY + 8;
 
   if (data.tax > 0) {
     doc.setTextColor(...mutedTextColor);
@@ -202,32 +241,11 @@ export function generatePDF(data: DocumentData) {
   doc.text("GRAND TOTAL:", summaryX, grandTotalY + 7);
   doc.text(`INR ${data.grandTotal.toFixed(2)}`, pageWidth - 14, grandTotalY + 7, { align: "right" });
 
-  // Bank Details Section
-  const bankY = finalY;
+  // Terms & Conditions (Side-by-side with Summary)
   doc.setTextColor(...mutedTextColor);
   doc.setFontSize(9);
   doc.setFont("helvetica", "bold");
-  doc.text("BANK DETAILS", 14, bankY);
-
-  doc.setFont("helvetica", "normal");
-  doc.setTextColor(...textColor);
-  const bankInfo = data.bankDetails || {
-    accountName: "KISHOR MARUTI SHELAR",
-    accountNumber: "313402000000009",
-    bankName: "Indian Overseas Bank, NEDUMANAGAD",
-    ifscCode: "IOBA0003143"
-  };
-
-  doc.text(`Bank : ${bankInfo.bankName || "Indian Overseas Bank, NEDUMANAGAD"}`, 14, bankY + 6);
-  doc.text(`Account Name : ${bankInfo.accountName}`, 14, bankY + 11);
-  doc.text(`Account Number : ${bankInfo.accountNumber}`, 14, bankY + 16);
-  doc.text(`IFSC : ${bankInfo.ifscCode}`, 14, bankY + 21);
-
-  // Terms & Conditions
-  const tcY = bankY + 40;
-  doc.setTextColor(...mutedTextColor);
-  doc.setFont("helvetica", "bold");
-  doc.text("TERMS & CONDITIONS", 14, tcY);
+  doc.text("TERMS & CONDITIONS", 14, currentY);
 
   doc.setFont("helvetica", "normal");
   doc.setTextColor(...textColor);
@@ -240,60 +258,116 @@ export function generatePDF(data: DocumentData) {
     "6. Any additional work will be charged separately."
   ];
 
-  terms.forEach((term, index) => {
-    doc.text(term, 14, tcY + 6 + (index * 5));
+  let termY = currentY + 6;
+  terms.forEach((term) => {
+    const splitTerm = doc.splitTextToSize(term, summaryX - 20);
+    doc.text(splitTerm, 14, termY);
+    termY += splitTerm.length * 5;
   });
 
-  // Footer / Signatures Section
-  const footerY = doc.internal.pageSize.height - 45;
-  doc.setDrawColor(...primaryColor);
-  doc.setLineWidth(0.5);
-  doc.line(14, footerY - 5, pageWidth - 14, footerY - 5);
+  if (data.layout === "2-partners") {
+    let currentYAfterTerms = termY + 5;
+    if (currentYAfterTerms + 25 > footerStartY) {
+      doc.addPage();
+      currentYAfterTerms = 20;
+    }
+    
+    doc.setTextColor(...mutedTextColor);
+    doc.setFontSize(9);
+    doc.setFont("helvetica", "bold");
+    doc.text("BANK DETAILS", 14, currentYAfterTerms);
 
-  // 3 Co-founder Signatures Grid
-  const sigWidth = (pageWidth - 28) / 3;
-  const sigY = footerY + 15;
+    doc.setFont("helvetica", "normal");
+    doc.setTextColor(...textColor);
+    
+    doc.text(`Bank : ${bankInfo.bankName || "Indian Overseas Bank, NEDUMANAGAD"}`, 14, currentYAfterTerms + 6);
+    doc.text(`Account Name : ${bankInfo.accountName}`, 14, currentYAfterTerms + 11);
+    doc.text(`Account Number : ${bankInfo.accountNumber}`, 14, currentYAfterTerms + 16);
+    doc.text(`IFSC : ${bankInfo.ifscCode}`, 14, currentYAfterTerms + 21);
+  }
 
-  const founders = [
-    { name: "Kishor Shelar", role: "Co-founder & Business managing director" },
-    { name: "Saalim Khan", role: "Co-founder" },
-    { name: "Aasim Khan", role: "Co-founder" }
-  ];
+  // Footer / Signatures Section on EVERY page
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const pageCount = (doc as any).internal.getNumberOfPages();
+  for (let i = 1; i <= pageCount; i++) {
+    doc.setPage(i);
+    
+    if (data.layout !== "2-partners") {
+      // Bank Details Section
+      doc.setTextColor(...mutedTextColor);
+      doc.setFontSize(9);
+      doc.setFont("helvetica", "bold");
+      doc.text("BANK DETAILS", 14, footerStartY);
 
-  founders.forEach((founder, i) => {
-    const x = 14 + (i * sigWidth);
+      doc.setFont("helvetica", "normal");
+      doc.setTextColor(...textColor);
 
-    // Signature Image or Placeholder Line
-    if (data.signatures && data.signatures[i]) {
-      try {
-        // Reduced height and centered more precisely
-        doc.addImage(data.signatures[i], 'PNG', x + 10, sigY - 10, sigWidth - 30, 10);
-      } catch (e) {
-        console.error("Failed to add signature image:", e);
+      doc.text(`Bank : ${bankInfo.bankName || "Indian Overseas Bank, NEDUMANAGAD"}`, 14, footerStartY + 6);
+      doc.text(`Account Name : ${bankInfo.accountName}`, 14, footerStartY + 11);
+      doc.text(`Account Number : ${bankInfo.accountNumber}`, 14, footerStartY + 16);
+      doc.text(`IFSC : ${bankInfo.ifscCode}`, 14, footerStartY + 21);
+    }
+
+    // Blue Line
+    doc.setDrawColor(...primaryColor);
+    doc.setLineWidth(0.5);
+    doc.line(14, footerStartY + 30, pageWidth - 14, footerStartY + 30);
+
+    // 3 Co-founder Signatures Grid
+    const isTwoPartners = data.layout === "2-partners";
+    const sigWidth = (pageWidth - 28) / (isTwoPartners ? 2 : 3);
+    const sigY = footerStartY + 45;
+
+    let founders = [
+      { name: "Kishor Shelar", role: "Co-founder & Business managing director" },
+      { name: "Saalim Khan", role: "Co-founder" },
+      { name: "Aasim Khan", role: "Co-founder" }
+    ];
+
+    if (isTwoPartners) {
+      founders = [
+        { name: "Saalim Khan", role: "Co-founder" },
+        { name: "Aasim Khan", role: "Co-founder" }
+      ];
+    }
+
+    founders.forEach((founder, idx) => {
+      const x = 14 + (idx * sigWidth);
+
+      // Signature Image or Placeholder Line
+      if (data.signatures && data.signatures[idx]) {
+        try {
+          // Fixed width and centered precisely
+          const imageWidth = 40;
+          const imageX = x + (sigWidth - imageWidth) / 2;
+          doc.addImage(data.signatures[idx], 'PNG', imageX, sigY - 10, imageWidth, 10);
+        } catch (e) {
+          console.error("Failed to add signature image:", e);
+          doc.setDrawColor(...mutedTextColor);
+          doc.line(x + 5, sigY + 10, x + sigWidth - 5, sigY + 10);
+        }
+      } else {
         doc.setDrawColor(...mutedTextColor);
         doc.line(x + 5, sigY + 10, x + sigWidth - 5, sigY + 10);
       }
-    } else {
-      doc.setDrawColor(...mutedTextColor);
-      doc.line(x + 5, sigY + 10, x + sigWidth - 5, sigY + 10);
-    }
 
-    // Name & Role (Decreased gap from signature)
-    doc.setTextColor(...textColor);
-    doc.setFont("helvetica", "bold");
-    doc.setFontSize(9);
-    doc.text(founder.name, x + sigWidth / 2, sigY + 8, { align: "center" });
+      // Name & Role (Decreased gap from signature)
+      doc.setTextColor(...textColor);
+      doc.setFont("helvetica", "bold");
+      doc.setFontSize(9);
+      doc.text(founder.name, x + sigWidth / 2, sigY + 8, { align: "center" });
 
-    doc.setTextColor(...mutedTextColor);
-    doc.setFont("helvetica", "normal");
+      doc.setTextColor(...mutedTextColor);
+      doc.setFont("helvetica", "normal");
+      doc.setFontSize(8);
+      doc.text(founder.role, x + sigWidth / 2, sigY + 13, { align: "center" });
+    });
+
+    // Bottom Note
     doc.setFontSize(8);
-    doc.text(founder.role, x + sigWidth / 2, sigY + 13, { align: "center" });
-  });
-
-  // Bottom Note
-  doc.setFontSize(8);
-  doc.setTextColor(...mutedTextColor);
-  doc.text("This is a computer-generated document. No physical signature required for electronic acceptance.", pageWidth / 2, doc.internal.pageSize.height - 5, { align: "center" });
+    doc.setTextColor(...mutedTextColor);
+    doc.text("This is a computer-generated document. No physical signature required for electronic acceptance.", pageWidth / 2, doc.internal.pageSize.height - 5, { align: "center" });
+  }
 
   // Download PDF
   doc.save(`${data.type}_${data.number}.pdf`);

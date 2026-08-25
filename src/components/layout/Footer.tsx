@@ -1,94 +1,299 @@
+"use client";
+
 import Link from "next/link";
 import Image from "next/image";
-import { Mail, Phone, Linkedin, Twitter, Github } from "lucide-react";
+import { 
+  Building2, 
+  LayoutGrid, 
+  Folder, 
+  Phone, 
+  ChevronRight,
+  Mail,
+  MapPin,
+  Clock,
+  Lightbulb,
+  Users,
+  ShieldCheck,
+  TrendingUp,
+  Linkedin,
+  Twitter,
+  Github,
+  Instagram,
+  ArrowRight,
+  BadgeCheck,
+  Trophy,
+  Heart
+} from "lucide-react";
 
 export function Footer() {
   return (
-    <footer className="bg-white border-t border-slate-100 py-24 relative overflow-hidden">
-      <div className="absolute inset-0 bg-grid opacity-[0.02] -z-10" />
-      
-      <div className="container px-4 md:px-6">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-16">
-          <div className="md:col-span-2">
-            <Link href="/" className="mb-8 inline-block group">
-              <Image
-                src="/logo.png"
-                alt="Duocore Softwares Logo"
-                width={180}
-                height={40}
-                className="object-contain h-10 w-auto transition-transform group-hover:scale-105"
-              />
-            </Link>
-            <p className="text-slate-500 text-lg mb-10 max-w-md font-medium leading-relaxed">
-              Architecting the next generation of enterprise software with intelligence, precision, and a commitment to extreme quality.
-            </p>
-            <div className="flex gap-6">
-               {[Linkedin, Twitter, Github].map((Icon, i) => (
-                 <a key={i} href="#" className="h-12 w-12 rounded-xl bg-slate-50 border border-slate-100 flex items-center justify-center text-slate-400 hover:text-primary hover:bg-primary/5 hover:border-primary/20 transition-all">
-                   <Icon className="h-5 w-5" />
-                 </a>
-               ))}
+    <footer className="bg-slate-50/50 dark:bg-[#020617] py-12 md:py-20 font-sans relative overflow-hidden transition-colors">
+      {/* Background ambient light */}
+      <div className="absolute top-0 left-1/4 w-96 h-96 bg-blue-400/5 rounded-full blur-[100px] pointer-events-none" />
+      <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-blue-600/5 rounded-full blur-[100px] pointer-events-none" />
+
+      <div className="w-full max-w-[1500px] mx-auto px-4 md:px-8">
+        
+        {/* Main Glassmorphism Container */}
+        <div className="bg-white/80 dark:bg-slate-900/60 backdrop-blur-2xl border border-white dark:border-slate-800 shadow-[0_20px_80px_-15px_rgba(37,99,235,0.08)] dark:shadow-none rounded-[2rem] md:rounded-[3rem] p-8 md:p-12 lg:p-16 relative z-10 transition-colors">
+          
+          {/* Top Grid Area */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-12 lg:gap-8 mb-16">
+            
+            {/* Column 1: Brand & About (Span 4) */}
+            <div className="lg:col-span-4 flex flex-col">
+              <Link href="/" className="mb-6 inline-block">
+                <Image
+                  src="/logo.png"
+                  alt="Duocore Softwares Logo"
+                  width={200}
+                  height={45}
+                  className="object-contain h-10 w-auto transition-all dark:hidden"
+                />
+                <Image
+                  src="/logo-white-text.png"
+                  alt="Duocore Softwares Logo"
+                  width={200}
+                  height={70}
+                  className="object-contain h-[64px] w-auto -my-3 transition-all hidden dark:block"
+                />
+              </Link>
+              
+              <p className="text-slate-500 dark:text-slate-400 text-[13px] font-medium leading-relaxed mb-8 max-w-sm pr-4">
+                Architecting the next generation of enterprise software with intelligence, precision, and a commitment to extreme quality.
+              </p>
+              
+              {/* Feature Badges */}
+              <div className="grid grid-cols-2 gap-3 mb-10 max-w-sm">
+                <div className="flex items-center gap-2.5 bg-slate-50/80 dark:bg-slate-800/50 hover:bg-blue-50/50 dark:hover:bg-slate-800 transition-colors border border-slate-100 dark:border-slate-700/50 rounded-xl px-3 py-2.5">
+                  <Lightbulb className="w-4 h-4 text-blue-600 shrink-0" />
+                  <span className="text-[10px] font-bold text-slate-700 dark:text-slate-300">Innovation Driven</span>
+                </div>
+                <div className="flex items-center gap-2.5 bg-slate-50/80 dark:bg-slate-800/50 hover:bg-blue-50/50 dark:hover:bg-slate-800 transition-colors border border-slate-100 dark:border-slate-700/50 rounded-xl px-3 py-2.5">
+                  <Users className="w-4 h-4 text-blue-600 shrink-0" />
+                  <span className="text-[10px] font-bold text-slate-700 dark:text-slate-300">Client Focused</span>
+                </div>
+                <div className="flex items-center gap-2.5 bg-slate-50/80 dark:bg-slate-800/50 hover:bg-blue-50/50 dark:hover:bg-slate-800 transition-colors border border-slate-100 dark:border-slate-700/50 rounded-xl px-3 py-2.5">
+                  <ShieldCheck className="w-4 h-4 text-blue-600 shrink-0" />
+                  <span className="text-[10px] font-bold text-slate-700 dark:text-slate-300">Quality Assured</span>
+                </div>
+                <div className="flex items-center gap-2.5 bg-slate-50/80 dark:bg-slate-800/50 hover:bg-blue-50/50 dark:hover:bg-slate-800 transition-colors border border-slate-100 dark:border-slate-700/50 rounded-xl px-3 py-2.5">
+                  <TrendingUp className="w-4 h-4 text-blue-600 shrink-0" />
+                  <span className="text-[10px] font-bold text-slate-700 dark:text-slate-300">Scalable Solutions</span>
+                </div>
+              </div>
+
+              {/* Follow Us */}
+              <div>
+                <h4 className="text-[10px] font-black text-blue-600 uppercase tracking-widest mb-4">Follow Us</h4>
+                <div className="flex gap-3">
+                  {[
+                    { icon: Linkedin, href: "#" },
+                    { icon: Twitter, href: "#" },
+                    { icon: Github, href: "#" },
+                    { icon: Instagram, href: "#" }
+                  ].map((social, idx) => (
+                    <a key={idx} href={social.href} className="w-10 h-10 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 flex items-center justify-center text-blue-500 hover:bg-blue-600 hover:text-white hover:border-blue-600 dark:hover:border-blue-600 transition-all shadow-sm">
+                      <social.icon className="w-4 h-4" />
+                    </a>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            {/* Column 2: Company (Span 2) */}
+            <div className="lg:col-span-2">
+              <div className="flex flex-col items-start gap-4 mb-6">
+                <div className="w-10 h-10 rounded-xl bg-blue-50 dark:bg-blue-900/20 flex items-center justify-center text-blue-600 shrink-0">
+                   <Building2 className="w-4 h-4" />
+                </div>
+                <h3 className="text-xs font-black text-blue-600 uppercase tracking-widest">Company</h3>
+              </div>
+              <ul className="space-y-3.5">
+                {["Home", "About Us", "Our Mission", "Our Team", "Careers", "Blog", "News & Updates"].map((item) => (
+                  <li key={item}>
+                    <Link href="#" className="flex items-center gap-2 text-[13px] font-bold text-slate-600 dark:text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 group transition-colors">
+                      <ChevronRight className="w-3 h-3 text-blue-400 group-hover:translate-x-0.5 transition-transform" />
+                      {item}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            {/* Column 3: Services (Span 2) */}
+            <div className="lg:col-span-2">
+              <div className="flex flex-col items-start gap-4 mb-6">
+                <div className="w-10 h-10 rounded-xl bg-blue-50 dark:bg-blue-900/20 flex items-center justify-center text-blue-600 shrink-0">
+                   <LayoutGrid className="w-4 h-4" />
+                </div>
+                <h3 className="text-xs font-black text-blue-600 uppercase tracking-widest">Services</h3>
+              </div>
+              <ul className="space-y-3.5">
+                {["AI Development", "Web Development", "Mobile Development", "Cloud Solutions", "SaaS Development", "UI/UX Design", "IT Consulting"].map((item) => (
+                  <li key={item}>
+                    <Link href="#" className="flex items-center gap-2 text-[13px] font-bold text-slate-600 dark:text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 group transition-colors">
+                      <ChevronRight className="w-3 h-3 text-blue-400 group-hover:translate-x-0.5 transition-transform" />
+                      {item}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            {/* Column 4: Resources (Span 2) */}
+            <div className="lg:col-span-2">
+              <div className="flex flex-col items-start gap-4 mb-6">
+                <div className="w-10 h-10 rounded-xl bg-blue-50 dark:bg-blue-900/20 flex items-center justify-center text-blue-600 shrink-0">
+                   <Folder className="w-4 h-4" />
+                </div>
+                <h3 className="text-xs font-black text-blue-600 uppercase tracking-widest">Resources</h3>
+              </div>
+              <ul className="space-y-3.5">
+                {["Case Studies", "Portfolio", "Industries", "Technology Stack", "Documentation", "FAQs", "Support Center"].map((item) => (
+                  <li key={item}>
+                    <Link href="#" className="flex items-center gap-2 text-[13px] font-bold text-slate-600 dark:text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 group transition-colors">
+                      <ChevronRight className="w-3 h-3 text-blue-400 group-hover:translate-x-0.5 transition-transform" />
+                      {item}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            {/* Column 5: Get In Touch (Span 2) */}
+            <div className="lg:col-span-2">
+              <div className="flex flex-col items-start gap-4 mb-6">
+                <div className="w-10 h-10 rounded-xl bg-blue-50 dark:bg-blue-900/20 flex items-center justify-center text-blue-600 shrink-0">
+                   <Phone className="w-4 h-4" />
+                </div>
+                <h3 className="text-xs font-black text-blue-600 uppercase tracking-widest">Get In Touch</h3>
+              </div>
+              
+              <ul className="space-y-6">
+                <li className="flex items-start gap-3">
+                  <div className="w-8 h-8 rounded-full bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 flex items-center justify-center text-blue-500 shrink-0 shadow-sm mt-0.5">
+                    <Mail className="w-3.5 h-3.5" />
+                  </div>
+                  <div className="flex flex-col">
+                    <span className="text-[9px] font-black text-blue-600 uppercase tracking-widest mb-0.5">Email Us</span>
+                    <a href="mailto:info@duocoresoftware.com" className="text-[12px] font-bold text-slate-700 dark:text-slate-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">info@duocoresoftware.com</a>
+                  </div>
+                </li>
+                
+                <li className="flex items-start gap-3">
+                  <div className="w-8 h-8 rounded-full bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 flex items-center justify-center text-blue-500 shrink-0 shadow-sm mt-0.5">
+                    <Phone className="w-3.5 h-3.5" />
+                  </div>
+                  <div className="flex flex-col">
+                    <span className="text-[9px] font-black text-blue-600 uppercase tracking-widest mb-0.5">Call Us</span>
+                    <a href="tel:+917028350089" className="text-[12px] font-bold text-slate-700 dark:text-slate-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">+91 70283 50089</a>
+                  </div>
+                </li>
+
+                <li className="flex items-start gap-3">
+                  <div className="w-8 h-8 rounded-full bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 flex items-center justify-center text-blue-500 shrink-0 shadow-sm mt-0.5">
+                    <MapPin className="w-3.5 h-3.5" />
+                  </div>
+                  <div className="flex flex-col">
+                    <span className="text-[9px] font-black text-blue-600 uppercase tracking-widest mb-0.5">Our Office</span>
+                    <span className="text-[12px] font-bold text-slate-700 dark:text-slate-300 leading-snug">Duocore Softwares LLP<br/>Pune, Maharashtra, India<br/>411001</span>
+                  </div>
+                </li>
+
+                <li className="flex items-start gap-3">
+                  <div className="w-8 h-8 rounded-full bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 flex items-center justify-center text-blue-500 shrink-0 shadow-sm mt-0.5">
+                    <Clock className="w-3.5 h-3.5" />
+                  </div>
+                  <div className="flex flex-col">
+                    <span className="text-[9px] font-black text-blue-600 uppercase tracking-widest mb-0.5">Working Hours</span>
+                    <span className="text-[12px] font-bold text-slate-700 dark:text-slate-300 leading-snug">Mon - Sat: 9:30 AM - 6:30 PM<br/>Sunday: Closed</span>
+                  </div>
+                </li>
+              </ul>
             </div>
           </div>
-          
-          <div>
-            <h4 className="font-black text-xl text-slate-900 mb-8">Navigation</h4>
-            <ul className="space-y-4">
-              {[
-                { name: "Home", href: "/" },
-                { name: "About", href: "/about" },
-                { name: "Services", href: "/#services" },
-                { name: "Portfolio", href: "/#live-projects" },
-                { name: "Contact", href: "https://wa.me/917028350089?text=Hi%20Duocore%20Team%2C%20I%E2%80%99m%20interested%20in%20building%20a%20project.%20Can%20you%20help%20me%20with%20the%20details%3F", external: true }
-              ].map((item) => (
-                <li key={item.name}>
-                  {item.external ? (
-                    <a href={item.href} target="_blank" rel="noopener noreferrer" className="text-slate-500 hover:text-primary font-bold transition-colors">
-                      {item.name}
-                    </a>
-                  ) : (
-                    <Link href={item.href} className="text-slate-500 hover:text-primary font-bold transition-colors">
-                      {item.name}
-                    </Link>
-                  )}
-                </li>
+
+          {/* Newsletter Section */}
+          <div className="bg-slate-50/80 dark:bg-slate-900/80 border border-slate-100 dark:border-slate-800 rounded-2xl md:rounded-[2rem] p-6 md:p-8 flex flex-col md:flex-row items-center justify-between gap-6 mb-12 transition-colors">
+            <div className="flex flex-col md:flex-row items-center md:items-start text-center md:text-left gap-4 md:gap-5 w-full md:w-auto">
+              <div className="w-14 h-14 rounded-full bg-blue-600 text-white flex items-center justify-center shrink-0 shadow-lg shadow-blue-600/30">
+                <Mail className="w-6 h-6" />
+              </div>
+              <div className="flex flex-col">
+                <h4 className="text-lg md:text-xl font-black text-slate-900 dark:text-white mb-1">Stay Updated with Our Latest News</h4>
+                <p className="text-[13px] font-medium text-slate-500 dark:text-slate-400">Subscribe to our newsletter and never miss an update.</p>
+              </div>
+            </div>
+            
+            <div className="w-full md:w-auto flex flex-col sm:flex-row gap-3">
+              <input 
+                type="email" 
+                placeholder="Enter your email address"
+                className="h-12 md:h-14 w-full sm:w-72 bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl md:rounded-2xl px-5 text-sm dark:text-white outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all font-medium"
+              />
+              <button className="h-12 md:h-14 px-8 bg-blue-600 hover:bg-blue-700 text-white rounded-xl md:rounded-2xl font-bold shadow-lg shadow-blue-600/20 transition-all flex items-center justify-center gap-2 whitespace-nowrap">
+                Subscribe
+                <ArrowRight className="w-4 h-4" />
+              </button>
+            </div>
+          </div>
+
+          {/* Bottom Bar */}
+          <div className="border-t border-slate-200/60 dark:border-slate-800 pt-8 flex flex-col xl:flex-row justify-between items-center gap-8 text-center xl:text-left transition-colors">
+            
+            {/* Copyright & Crafted With */}
+            <div className="flex flex-col gap-1.5">
+              <span className="text-[12px] font-bold text-slate-500 dark:text-slate-400">
+                © {new Date().getFullYear()} Duocore Softwares. All rights reserved.
+              </span>
+              <span className="text-[11px] font-bold text-slate-400 dark:text-slate-500 flex items-center justify-center xl:justify-start gap-1">
+                Crafted with <Heart className="w-3 h-3 text-blue-500 fill-blue-500" /> by Duocore Team
+              </span>
+            </div>
+
+            {/* Trust Badges */}
+            <div className="flex flex-wrap justify-center gap-4 md:gap-8">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-full bg-blue-50 dark:bg-blue-900/20 text-blue-600 flex items-center justify-center shrink-0">
+                  <ShieldCheck className="w-5 h-5" />
+                </div>
+                <div className="flex flex-col items-start">
+                  <span className="text-[11px] font-black text-slate-800 dark:text-slate-200">Secure & Reliable</span>
+                  <span className="text-[9px] font-bold text-slate-400 dark:text-slate-500">Data Protection</span>
+                </div>
+              </div>
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-full bg-blue-50 dark:bg-blue-900/20 text-blue-600 flex items-center justify-center shrink-0">
+                  <BadgeCheck className="w-5 h-5" />
+                </div>
+                <div className="flex flex-col items-start">
+                  <span className="text-[11px] font-black text-slate-800 dark:text-slate-200">ISO 27001 Compliant</span>
+                  <span className="text-[9px] font-bold text-slate-400 dark:text-slate-500">Security Standard</span>
+                </div>
+              </div>
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-full bg-blue-50 dark:bg-blue-900/20 text-blue-600 flex items-center justify-center shrink-0">
+                  <Trophy className="w-5 h-5" />
+                </div>
+                <div className="flex flex-col items-start">
+                  <span className="text-[11px] font-black text-slate-800 dark:text-slate-200">100% Client Satisfaction</span>
+                  <span className="text-[9px] font-bold text-slate-400 dark:text-slate-500">Our Commitment</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Legal Links */}
+            <div className="flex flex-wrap justify-center gap-6 md:gap-8">
+              {["Privacy Policy", "Terms of Service", "Sitemap"].map((link) => (
+                <Link key={link} href="#" className="text-[12px] font-bold text-slate-500 dark:text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
+                  {link}
+                </Link>
               ))}
-            </ul>
+            </div>
+
           </div>
-          
-          <div>
-            <h4 className="font-black text-xl text-slate-900 mb-8">Connect</h4>
-            <ul className="space-y-6">
-               <li className="flex items-start gap-4 group">
-                 <div className="mt-1 h-10 w-10 rounded-lg bg-primary/5 flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-white transition-all">
-                   <Mail className="h-4 w-4" />
-                 </div>
-                 <div>
-                   <p className="text-xs font-black text-slate-400 uppercase tracking-widest mb-1">Email Us</p>
-                   <a href="mailto:info@duocoresoftware.com" className="text-slate-700 font-bold hover:text-primary transition-colors">info@duocoresoftware.com</a>
-                 </div>
-               </li>
-               <li className="flex items-start gap-4 group">
-                 <div className="mt-1 h-10 w-10 rounded-lg bg-primary/5 flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-white transition-all">
-                   <Phone className="h-4 w-4" />
-                 </div>
-                 <div>
-                   <p className="text-xs font-black text-slate-400 uppercase tracking-widest mb-1">Call Us</p>
-                   <a href="tel:+917028350089" className="text-slate-700 font-bold hover:text-primary transition-colors">+91 70283 50089</a>
-                 </div>
-               </li>
-            </ul>
-          </div>
-        </div>
-        
-        <div className="mt-24 pt-12 border-t border-slate-100/50 flex flex-col md:flex-row justify-between items-center gap-6">
-          <p className="text-slate-400 font-bold text-sm">
-            © {new Date().getFullYear()} Duocore Softwares. All rights reserved.
-          </p>
-          <div className="flex gap-10">
-            <Link href="/privacy-policy" className="text-sm font-bold text-slate-400 hover:text-primary transition-colors">Privacy Policy</Link>
-            <Link href="/terms" className="text-sm font-bold text-slate-400 hover:text-primary transition-colors">Terms of Service</Link>
-          </div>
+
         </div>
       </div>
     </footer>
