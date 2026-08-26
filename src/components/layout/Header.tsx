@@ -60,21 +60,29 @@ export function Header() {
         )}
       >
         <div className="w-full max-w-[1800px] mx-auto px-6 md:px-12 lg:px-20 flex items-center justify-between">
-          <Link href="/" className="flex items-center gap-2 group relative z-[110]">
+          <Link href="/" className="flex items-center gap-2 md:gap-3 group relative z-[110]">
             <Image
               src="/logo.png"
               alt="Duocore Softwares Logo"
               width={200}
               height={50}
-              className="object-contain h-10 w-auto transition-transform group-hover:scale-105 dark:hidden"
+              className="object-contain h-10 w-auto transition-transform group-hover:scale-105 dark:hidden shrink-0"
             />
             <Image
               src="/logo-white-text.png"
               alt="Duocore Softwares Logo"
               width={200}
               height={70}
-              className="object-contain h-[64px] w-auto -my-3 transition-transform group-hover:scale-105 hidden dark:block"
+              className="object-contain h-[64px] w-auto -my-3 transition-transform group-hover:scale-105 hidden dark:block shrink-0"
             />
+            <div className="hidden lg:flex flex-col leading-tight -ml-1">
+              <span className="font-black text-lg text-slate-900 dark:text-white tracking-tight">
+                Duocore Software
+              </span>
+              <span className="font-bold text-[10px] text-blue-600 dark:text-blue-400 tracking-[0.2em] uppercase">
+                Company
+              </span>
+            </div>
           </Link>
 
           {/* Desktop Navigation */}
@@ -98,7 +106,7 @@ export function Header() {
           </nav>
 
           <div className="flex items-center gap-3 md:gap-4">
-            <a href="https://wa.me/917028350089?text=Hi%20Duocore%20Team%2C%20I%E2%80%99m%20interested%20in%20building%20a%20project.%20Can%20you%20help%20me%20with%20the%20details%3F" target="_blank" rel="noopener noreferrer" className="hidden xl:block">
+            <a href="https://wa.me/919970359386?text=Hi%20Duocore%20Team%2C%20I%E2%80%99m%20interested%20in%20building%20a%20project.%20Can%20you%20help%20me%20with%20the%20details%3F" target="_blank" rel="noopener noreferrer" className="hidden xl:block">
               <Button className="bg-blue-600 hover:bg-blue-500 text-white font-semibold rounded-xl px-6 shadow-lg shadow-blue-600/20 flex items-center gap-2">
                 Contact Us <ArrowUpRight className="h-4 w-4" />
               </Button>
@@ -180,7 +188,7 @@ export function Header() {
                           animate={{ opacity: 1, y: 0 }}
                           transition={{ delay: 0.5, duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
                         >
-                          <a href="https://wa.me/917028350089?text=Hi%20Duocore%20Team%2C%20I%E2%80%99m%20interested%20in%20building%20a%20project.%20Can%20you%20help%20me%20with%20the%20details%3F" target="_blank" rel="noopener noreferrer" onClick={() => setIsOpen(false)}>
+                          <a href="https://wa.me/919970359386?text=Hi%20Duocore%20Team%2C%20I%E2%80%99m%20interested%20in%20building%20a%20project.%20Can%20you%20help%20me%20with%20the%20details%3F" target="_blank" rel="noopener noreferrer" onClick={() => setIsOpen(false)}>
                             <Button className="w-full h-14 bg-primary hover:bg-primary/90 text-white font-black text-sm rounded-2xl shadow-xl shadow-primary/20 transition-all">
                               Contact Us
                             </Button>

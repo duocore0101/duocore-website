@@ -165,7 +165,7 @@ export function Hero() {
             </motion.h1>
 
             <motion.p variants={item} className="text-base md:text-lg text-slate-600 dark:text-slate-300 mb-8 leading-relaxed font-medium max-w-xl">
-              At Duocore Software, we empower businesses with cutting-edge technology and intelligent solutions that drive growth, efficiency, and digital transformation.
+              At Duocore Software Company, we empower businesses with cutting-edge technology and intelligent solutions that drive growth, efficiency, and digital transformation.
             </motion.p>
 
             <motion.div variants={item} className="flex flex-col sm:flex-row gap-3 mb-8">
