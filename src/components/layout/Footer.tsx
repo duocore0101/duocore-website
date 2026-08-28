@@ -257,7 +257,7 @@ export function Footer() {
             {/* Copyright & Crafted With */}
             <div className="flex flex-col gap-1.5">
               <span className="text-[12px] font-bold text-slate-500 dark:text-slate-400">
-                © {new Date().getFullYear()} Duocore Softwares. All rights reserved.
+                © {new Date().getFullYear()} Duocore Software Company. All rights reserved.
               </span>
               <span className="text-[11px] font-bold text-slate-400 dark:text-slate-500 flex items-center justify-center xl:justify-start gap-1">
                 Crafted with <Heart className="w-3 h-3 text-blue-500 fill-blue-500" /> by Duocore Team
