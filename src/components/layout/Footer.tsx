@@ -303,7 +303,7 @@ export function Footer() {
               <Link href="/data-deletion" className="text-[12px] font-bold text-slate-500 dark:text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
                 Data Deletion Instructions
               </Link>
-              <Link href="#" className="text-[12px] font-bold text-slate-500 dark:text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
+              <Link href="/terms-of-service" className="text-[12px] font-bold text-slate-500 dark:text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
                 Terms of Service
               </Link>
               <Link href="#" className="text-[12px] font-bold text-slate-500 dark:text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
