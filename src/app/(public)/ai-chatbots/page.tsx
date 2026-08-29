@@ -15,12 +15,9 @@ import {
   Rocket,
   Shield,
   Check,
-  Award,
   Lock,
-  Server,
   Bot,
   Mail,
-  BarChart,
   Network,
   ChevronDown
 } from "lucide-react";
@@ -55,7 +52,7 @@ export default function AIChatbotsPage() {
 
   const item = {
     hidden: { opacity: 0, y: 20 },
-    show: { opacity: 1, y: 0, transition: { duration: 0.5, ease: "easeOut" } }
+    show: { opacity: 1, y: 0, transition: { duration: 0.5, ease: "easeOut" as const } }
   };
 
   const glitters = [
@@ -200,7 +197,7 @@ export default function AIChatbotsPage() {
           <motion.div 
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
+            transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" as const }}
             className="relative lg:h-[500px] xl:h-[600px] w-full mt-8 lg:mt-0"
           >
             <div className="relative w-full h-full min-h-[350px] flex items-center justify-center lg:justify-end lg:pr-12 xl:pr-24 lg:-translate-x-8 xl:-translate-x-12">
@@ -224,7 +221,7 @@ export default function AIChatbotsPage() {
               Why Businesses Automate with AI?
             </h2>
             <p className="text-xs font-medium text-slate-500 dark:text-slate-400 leading-relaxed">
-              Automation isn't just about saving time — it's about creating smarter systems that drive growth and efficiency.
+              Automation isn&apos;t just about saving time — it&apos;s about creating smarter systems that drive growth and efficiency.
             </p>
           </div>
           
@@ -547,7 +544,7 @@ export default function AIChatbotsPage() {
               </div>
               
               <div className="text-sm font-medium text-slate-600 dark:text-slate-400 mb-8 p-4 bg-blue-50/50 dark:bg-blue-900/10 rounded-xl border border-blue-100 dark:border-blue-900/30">
-                You're requesting <span className="font-bold text-slate-900 dark:text-white">AI Chatbots — {selectedPlan}</span>. Not the right fit? Use the link above to change your selection.
+                You&apos;re requesting <span className="font-bold text-slate-900 dark:text-white">AI Chatbots — {selectedPlan}</span>. Not the right fit? Use the link above to change your selection.
               </div>
             </div>
 
@@ -586,7 +583,7 @@ export default function AIChatbotsPage() {
                   </div>
                   <div>
                     <label className="block text-sm font-bold text-slate-900 dark:text-white mb-1">Project Description <span className="text-blue-500">*</span></label>
-                    <p className="text-xs text-slate-500 dark:text-slate-400 mb-3">Explain what you need, who it's for, and any specifics you already know — the more detail, the better.</p>
+                    <p className="text-xs text-slate-500 dark:text-slate-400 mb-3">Explain what you need, who it&apos;s for, and any specifics you already know — the more detail, the better.</p>
                     <textarea value={formData.projectDescription} onChange={e => setFormData({...formData, projectDescription: e.target.value})} placeholder="Describe your project in as much detail as you can..." rows={5} className="w-full p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/50 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 outline-none transition-all resize-y dark:text-white"></textarea>
                   </div>
                   <div>
@@ -790,7 +787,7 @@ export default function AIChatbotsPage() {
               <Button className="rounded-full h-14 px-12 font-bold text-lg bg-blue-600 hover:bg-blue-700 text-white shadow-xl shadow-blue-900/20 transition-all hover:scale-105 mb-4">
                 Submit Project Inquiry
               </Button>
-              <p className="text-sm text-slate-500 dark:text-slate-400 font-medium">Review your details above, then submit when you're ready.</p>
+              <p className="text-sm text-slate-500 dark:text-slate-400 font-medium">Review your details above, then submit when you&apos;re ready.</p>
             </div>
           </div>
         )}

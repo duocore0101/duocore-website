@@ -1,6 +1,5 @@
 "use client";
 
-import { useState } from "react";
 import { motion } from "framer-motion";
 import { 
   ChevronRight, 
@@ -8,31 +7,19 @@ import {
   Zap, 
   Target, 
   TrendingUp, 
-  ShieldCheck, 
-  Clock,
+  ShieldCheck,
   CheckCircle2,
   DollarSign,
-  Rocket,
-  Shield,
-  Check,
-  Award,
   Lock,
-  Server,
-  Bot,
-  Mail,
-  BarChart,
+  Clock,
   Network,
-  ChevronDown,
   Info
 } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
-import { Button } from "@/components/ui/button";
+
 
 export default function WhatsAppAutomationPage() {
-  
-  const [showRequirements, setShowRequirements] = useState<boolean>(false);
-  const [showReview, setShowReview] = useState<boolean>(false);
   
 
   const container = {
@@ -45,7 +32,7 @@ export default function WhatsAppAutomationPage() {
 
   const item = {
     hidden: { opacity: 0, y: 20 },
-    show: { opacity: 1, y: 0, transition: { duration: 0.5, ease: "easeOut" } }
+    show: { opacity: 1, y: 0, transition: { duration: 0.5, ease: "easeOut" as const } }
   };
 
   const glitters = [
@@ -190,7 +177,7 @@ export default function WhatsAppAutomationPage() {
           <motion.div 
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
+            transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" as const }}
             className="relative lg:h-[500px] xl:h-[600px] w-full mt-8 lg:mt-0"
           >
             <div className="relative w-full h-full min-h-[350px] flex items-center justify-center lg:justify-end lg:pr-12 xl:pr-24 lg:-translate-x-8 xl:-translate-x-12">
@@ -214,7 +201,7 @@ export default function WhatsAppAutomationPage() {
               Why Businesses Automate with AI?
             </h2>
             <p className="text-xs font-medium text-slate-500 dark:text-slate-400 leading-relaxed">
-              Automation isn't just about saving time — it's about creating smarter systems that drive growth and efficiency.
+              Automation isn&apos;t just about saving time — it&apos;s about creating smarter systems that drive growth and efficiency.
             </p>
           </div>
           
