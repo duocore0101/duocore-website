@@ -24,32 +24,38 @@ export function Hero() {
     {
       icon: <Cpu className="h-5 w-5" />,
       title: "AI Automation",
-      desc: "Automate repetitive tasks and workflows using intelligent AI solutions to save time, reduce errors, and boost productivity."
+      desc: "Automate repetitive tasks and workflows using intelligent AI solutions to save time, reduce errors, and boost productivity.",
+      href: "/ai-automation"
     },
     {
       icon: <MessageSquare className="h-5 w-5" />,
       title: "AI Chatbots",
-      desc: "Smart conversational AI chatbots that engage users, answer queries, and enhance customer experience 24/7."
+      desc: "Smart conversational AI chatbots that engage users, answer queries, and enhance customer experience 24/7.",
+      href: "/ai-chatbots"
     },
     {
       icon: <Code2 className="h-5 w-5" />,
       title: "Custom Software",
-      desc: "Tailored software solutions designed to match your unique business needs and solve real-world challenges."
+      desc: "Tailored software solutions designed to match your unique business needs and solve real-world challenges.",
+      href: "/custom-software"
     },
     {
       icon: <MessageCircle className="h-5 w-5" />,
       title: "WhatsApp Automation",
-      desc: "Automate WhatsApp messages, notifications, and workflows to connect with customers instantly and effectively."
+      desc: "Automate WhatsApp messages, notifications, and workflows to connect with customers instantly and effectively.",
+      href: "/whatsapp-automation"
     },
     {
       icon: <Smartphone className="h-5 w-5" />,
       title: "Mobile App Development",
-      desc: "High-performance mobile apps for Android and iOS platforms built with modern technology and stunning user experience."
+      desc: "High-performance mobile apps for Android and iOS platforms built with modern technology and stunning user experience.",
+      href: "/mobile-app-development"
     },
     {
       icon: <Globe className="h-5 w-5" />,
       title: "Web Development",
-      desc: "Modern, responsive websites and web applications that deliver performance, scalability, and impact."
+      desc: "Modern, responsive websites and web applications that deliver performance, scalability, and impact.",
+      href: "/web-development"
     }
   ];
 
@@ -231,24 +237,25 @@ export function Hero() {
          {/* Bottom Cards Section */}
         <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-6 gap-4">
           {features.map((feature, idx) => (
-             <motion.div 
-               key={idx}
-               initial={{ opacity: 0, y: 30 }}
-               animate={{ opacity: 1, y: 0 }}
-               transition={{ duration: 0.6, delay: 0.4 + idx * 0.1, ease: "easeOut" }}
-               className="bg-white dark:bg-slate-900 rounded-[1.25rem] p-5 shadow-lg shadow-slate-200/40 dark:shadow-none border border-slate-100 dark:border-slate-800 flex flex-col hover:border-blue-200 dark:hover:border-blue-500/50 transition-all duration-300 group hover:-translate-y-1"
-             >
-               <div className="w-10 h-10 rounded-xl bg-blue-50 dark:bg-blue-900/20 text-blue-600 flex items-center justify-center mb-5 group-hover:scale-110 group-hover:bg-blue-600 group-hover:text-white transition-all duration-300">
-                 {feature.icon}
-               </div>
-               <h3 className="text-[15px] font-black text-slate-900 dark:text-white mb-2">{feature.title}</h3>
-               <p className="text-[11px] text-slate-500 dark:text-slate-400 font-medium leading-relaxed mb-4 flex-grow">
-                 {feature.desc}
-               </p>
-               <div className="mt-auto flex justify-end">
-                 <ArrowUpRight className="h-4 w-4 text-slate-300 dark:text-slate-600 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors duration-300" />
-               </div>
-             </motion.div>
+             <Link href={feature.href || "#"} key={idx} className="block h-full">
+               <motion.div 
+                 initial={{ opacity: 0, y: 30 }}
+                 animate={{ opacity: 1, y: 0 }}
+                 transition={{ duration: 0.6, delay: 0.4 + idx * 0.1, ease: "easeOut" }}
+                 className="bg-white dark:bg-slate-900 rounded-[1.25rem] p-5 shadow-lg shadow-slate-200/40 dark:shadow-none border border-slate-100 dark:border-slate-800 flex flex-col h-full hover:border-blue-200 dark:hover:border-blue-500/50 transition-all duration-300 group hover:-translate-y-1"
+               >
+                 <div className="w-10 h-10 rounded-xl bg-blue-50 dark:bg-blue-900/20 text-blue-600 flex items-center justify-center mb-5 group-hover:scale-110 group-hover:bg-blue-600 group-hover:text-white transition-all duration-300">
+                   {feature.icon}
+                 </div>
+                 <h3 className="text-[15px] font-black text-slate-900 dark:text-white mb-2">{feature.title}</h3>
+                 <p className="text-[11px] text-slate-500 dark:text-slate-400 font-medium leading-relaxed mb-4 flex-grow">
+                   {feature.desc}
+                 </p>
+                 <div className="mt-auto flex justify-end">
+                   <ArrowUpRight className="h-4 w-4 text-slate-300 dark:text-slate-600 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors duration-300" />
+                 </div>
+               </motion.div>
+             </Link>
           ))}
         </div>
       </div>
